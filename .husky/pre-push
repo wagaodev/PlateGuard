@@ -1,0 +1,38 @@
+#!/bin/sh
+
+echo "🔎 [PRE-PUSH] Verificando tipos TypeScript..."
+
+# Backend type check
+echo "  → app-backend: tsc --noEmit"
+cd app-backend && npx tsc --noEmit
+BACKEND_EXIT=$?
+cd ..
+
+if [ $BACKEND_EXIT -ne 0 ]; then
+  echo "❌ [PRE-PUSH] Erro de tipo no app-backend. Push bloqueado."
+  exit 1
+fi
+
+# Mobile type check
+echo "  → app-mobile: tsc --noEmit"
+cd app-mobile && npx tsc --noEmit
+MOBILE_EXIT=$?
+cd ..
+
+if [ $MOBILE_EXIT -ne 0 ]; then
+  echo "❌ [PRE-PUSH] Erro de tipo no app-mobile. Push bloqueado."
+  exit 1
+fi
+
+# Backend tests
+echo "  → app-backend: rodando testes unitários"
+cd app-backend && npx jest --config '{"moduleFileExtensions":["js","json","ts"],"rootDir":"test","testEnvironment":"node","testRegex":"service.spec.ts$","transform":{"^.+.(t|j)s$":"ts-jest"}}' --no-cache --silent
+TEST_EXIT=$?
+cd ..
+
+if [ $TEST_EXIT -ne 0 ]; then
+  echo "❌ [PRE-PUSH] Testes falharam no app-backend. Push bloqueado."
+  exit 1
+fi
+
+echo "✅ [PRE-PUSH] Todos os checks passaram. Push liberado."

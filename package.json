@@ -1,0 +1,38 @@
+{
+  "name": "plateguard",
+  "version": "1.0.0",
+  "description": "PlateGuard — Sistema de controle de acesso veicular por leitura de placa",
+  "private": true,
+  "scripts": {
+    "prepare": "husky",
+    "lint:backend": "cd app-backend && npm run lint",
+    "lint:mobile": "cd app-mobile && npx eslint . --ext .ts,.tsx",
+    "typecheck:backend": "cd app-backend && npx tsc --noEmit",
+    "typecheck:mobile": "cd app-mobile && npx tsc --noEmit",
+    "typecheck": "npm run typecheck:backend && npm run typecheck:mobile",
+    "test:backend": "cd app-backend && npm test",
+    "test:backend:e2e": "cd app-backend && npm run test:e2e"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wagaodev/PlateGuard.git"
+  },
+  "author": "Wagner Schultz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wagaodev/PlateGuard/issues"
+  },
+  "homepage": "https://github.com/wagaodev/PlateGuard#readme",
+  "lint-staged": {
+    "app-backend/**/*.ts": [
+      "bash -c 'cd app-backend && npx eslint --fix --no-error-on-unmatched-pattern \"$@\"' _"
+    ],
+    "app-mobile/**/*.{ts,tsx}": [
+      "bash -c 'cd app-mobile && npx eslint --fix --no-error-on-unmatched-pattern \"$@\"' _"
+    ]
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0"
+  }
+}
