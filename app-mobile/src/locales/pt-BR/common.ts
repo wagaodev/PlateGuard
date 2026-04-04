@@ -1,0 +1,33 @@
+export const commonMessages = {
+  greeting: 'Olá',
+  location: 'Portaria Principal',
+  newScan: 'Nova Leitura',
+  manualEntry: 'Inserir placa manualmente',
+  registerVehicle: 'Cadastrar Veículo',
+  addVehicle: 'Adicionar veículo',
+  tabs: {
+    scanner: 'Scanner',
+    vehicles: 'Veículos',
+    profile: 'Perfil',
+  },
+  profile: {
+    personalInfo: 'INFORMAÇÕES PESSOAIS',
+    myVehicles: 'MEUS VEÍCULOS',
+    history: 'Histórico',
+    notifications: 'Notificações',
+    settings: 'Configurações',
+    logout: 'Sair',
+    active: 'Ativo',
+  },
+  vehicle: {
+    plate: 'Placa',
+    model: 'Modelo',
+    color: 'Cor',
+    type: 'Tipo',
+    car: 'Carro',
+    motorcycle: 'Moto',
+    truck: 'Caminhonete',
+    generateQr: 'Gerar QR Code',
+    qrDescription: 'Permite acesso via leitura de QR Code',
+  },
+} as const;
