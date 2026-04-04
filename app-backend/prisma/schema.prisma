@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Vehicle {
+  id           String      @id @default(uuid())
+  plate        String      @unique
+  ownerName    String
+  vehicleType  String      @default("car")       // car | truck | motorcycle
+  vehicleModel String?
+  vehicleColor String?
+  accessType   String      @default("resident")  // resident | visitor | blocked
+  status       String                            // ALLOWED | DENIED | PENDING
+  qrCodeToken  String?     @unique               // token para leitura QR Code
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  accessLogs   AccessLog[]
+}
+
+model AccessLog {
+  id           String   @id @default(uuid())
+  plate        String
+  result       String                          // ALLOWED | DENIED | NOT_FOUND
+  reason       String?
+  entryMethod  String   @default("CAMERA")     // CAMERA | QR_CODE | MANUAL
+  requestedAt  DateTime @default(now())
+  vehiclePlate String?
+  vehicle      Vehicle? @relation(fields: [vehiclePlate], references: [plate])
+}
