@@ -31,7 +31,7 @@ jobs:
       - name: Backend - Testes com cobertura
         working-directory: app-backend
         run: |
-          npx jest --config '{"moduleFileExtensions":["js","json","ts"],"rootDir":"test","testEnvironment":"node","testRegex":"service.spec.ts$","transform":{"^.+.(t|j)s$":"ts-jest"}}' --no-cache --ci --coverage --coverageDirectory=coverage || true
+          npx jest --config '{"moduleFileExtensions":["js","json","ts"],"rootDir":"test","testEnvironment":"node","testRegex":".spec.ts$","transform":{"^.+.(t|j)s$":"ts-jest"}}' --no-cache --ci --coverage --coverageDirectory=coverage
         env:
           DATABASE_URL: "file:./data/plateguard.db"
 
@@ -40,17 +40,8 @@ jobs:
         working-directory: app-mobile
         run: npm ci
 
-      # SonarCloud Scan
+      # SonarCloud Scan (configuração lida do sonar-project.properties)
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v3
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.organization=wagaodev
-            -Dsonar.projectKey=wagaodev_PlateGuard
-            -Dsonar.sources=app-backend/src,app-mobile/src
-            -Dsonar.tests=app-backend/test
-            -Dsonar.typescript.lcov.reportPaths=app-backend/coverage/lcov.info
-            -Dsonar.exclusions=**/node_modules/**,**/dist/**,**/android/**,**/ios/**,**/*.spec.ts,**/generated/**
-            -Dsonar.test.inclusions=**/*.spec.ts,**/*.e2e.spec.ts
