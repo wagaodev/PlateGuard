@@ -25,7 +25,7 @@ export function useProfile() {
   }, [setAvatar]);
 
   const handleAddVehicle = useCallback(() => {
-    navigation.navigate('VehicleRegistration');
+    navigation.navigate('PlateCapture');
   }, [navigation]);
 
   return {

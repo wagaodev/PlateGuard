@@ -8,6 +8,7 @@ import { CameraViewfinder } from '../../components/CameraViewfinder';
 import { BrazilianPlate } from '../../components/BrazilianPlate';
 import { usePulseAnimation } from '../../hooks/animations';
 import { vehicleAccessMessages } from '../../locales/pt-BR/vehicleAccess';
+import { colors } from '../../theme/tokens';
 import { commonMessages } from '../../locales/pt-BR/common';
 import { useScanPlate } from './useScanPlate';
 import { styles } from './styles';
@@ -69,7 +70,7 @@ export function ScanPlateScreen() {
               value={manualPlate}
               onChangeText={setManualPlate}
               placeholder="AAA0A00"
-              placeholderTextColor="#5a5f72"
+              placeholderTextColor={colors.textMuted}
               maxLength={7}
               autoCapitalize="characters"
               onFocus={() => setInputFocused(true)}

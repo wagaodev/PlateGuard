@@ -1,42 +1,54 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import React from 'react';
+import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BrazilianPlate } from '../../components/BrazilianPlate';
 import { useFadeInAnimation } from '../../hooks/animations';
 import { commonMessages } from '../../locales/pt-BR/common';
+import { colors } from '../../theme/tokens';
 import { useVehicleRegistration } from './useVehicleRegistration';
 import { styles } from './styles';
 
-const TYPE_LABELS: Record<string, string> = {
-  car: commonMessages.vehicle.car,
-  motorcycle: commonMessages.vehicle.motorcycle,
-  truck: commonMessages.vehicle.truck,
-};
+function maskValue(value: string, visibleStart = 4, visibleEnd = 3): string {
+  if (value.length <= visibleStart + visibleEnd) return value;
+  const start = value.slice(0, visibleStart);
+  const end = value.slice(-visibleEnd);
+  const masked = '*'.repeat(value.length - visibleStart - visibleEnd);
+  return `${start}${masked}${end}`;
+}
+
+interface DetailRowProps {
+  icon: string;
+  label: string;
+  value: string;
+  delay: number;
+}
+
+function DetailRow({ icon, label, value, delay }: DetailRowProps) {
+  const fadeAnim = useFadeInAnimation(delay);
+  return (
+    <Animated.View style={[styles.detailRow, fadeAnim]}>
+      <Text style={styles.detailIcon}>{icon}</Text>
+      <View style={styles.detailContent}>
+        <Text style={styles.detailLabel}>{label}</Text>
+        <Text style={styles.detailValue}>{value}</Text>
+      </View>
+      <Text style={styles.lockIcon}>{'🔒'}</Text>
+    </Animated.View>
+  );
+}
 
 export function VehicleRegistrationScreen() {
   const {
-    plate,
-    setPlate,
-    model,
-    setModel,
-    selectedColor,
-    setSelectedColor,
-    selectedType,
-    setSelectedType,
+    lookupData,
     generateQr,
     setGenerateQr,
     handleSubmit,
     handleGoBack,
     isSubmitting,
-    vehicleColors,
-    vehicleTypes,
   } = useVehicleRegistration();
 
-  const [plateFocused, setPlateFocused] = useState(false);
-  const [modelFocused, setModelFocused] = useState(false);
-  const fadePreview = useFadeInAnimation(0);
-  const cleanPlate = plate.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  const fadeHero = useFadeInAnimation(0);
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -44,112 +56,55 @@ export function VehicleRegistrationScreen() {
         <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
           <Text style={styles.backText}>{'←'}</Text>
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Adicionar Veículo</Text>
-        <Text style={styles.headerStep}>1 de 2</Text>
+        <Text style={styles.headerTitle}>{commonMessages.vehicle.confirmRegistration}</Text>
       </View>
 
       <ScrollView style={styles.content} contentContainerStyle={{ paddingBottom: 40, gap: 16 }}>
+        <Animated.View style={[styles.plateHero, fadeHero]}>
+          <BrazilianPlate plate={lookupData.plate} size="lg" />
+          <Text style={styles.lookupInfoText}>{commonMessages.vehicle.lookupInfo}</Text>
+        </Animated.View>
+
         <View style={styles.formCard}>
-          <View>
-            <Text style={styles.label}>{commonMessages.vehicle.plate}</Text>
-            <TextInput
-              style={[styles.plateInput, plateFocused && styles.plateInputFocused]}
-              value={plate}
-              onChangeText={setPlate}
-              placeholder="AAA0A00"
-              placeholderTextColor="#5a5f72"
-              maxLength={7}
-              autoCapitalize="characters"
-              onFocus={() => setPlateFocused(true)}
-              onBlur={() => setPlateFocused(false)}
-            />
-          </View>
-
-          {cleanPlate.length >= 3 && (
-            <Animated.View style={[styles.platePreview, fadePreview]}>
-              <BrazilianPlate plate={cleanPlate} size="md" />
-            </Animated.View>
-          )}
-
-          <View>
-            <Text style={styles.label}>{commonMessages.vehicle.model}</Text>
-            <TextInput
-              style={[styles.textInput, modelFocused && styles.textInputFocused]}
-              value={model}
-              onChangeText={setModel}
-              placeholder="Ex: Honda Civic"
-              placeholderTextColor="#5a5f72"
-              onFocus={() => setModelFocused(true)}
-              onBlur={() => setModelFocused(false)}
-            />
-          </View>
-
-          <View>
-            <Text style={styles.label}>{commonMessages.vehicle.color}</Text>
-            <View style={styles.colorRow}>
-              {vehicleColors.map((color) => (
-                <TouchableOpacity
-                  key={color}
-                  style={[
-                    styles.colorPill,
-                    selectedColor === color && styles.colorPillSelected,
-                  ]}
-                  onPress={() => setSelectedColor(color)}
-                >
-                  <Text style={styles.colorPillText}>{color}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-
-          <View>
-            <Text style={styles.label}>{commonMessages.vehicle.type}</Text>
-            <View style={styles.typeRow}>
-              {vehicleTypes.map((type) => (
-                <TouchableOpacity
-                  key={type}
-                  style={[
-                    styles.typeButton,
-                    selectedType === type && styles.typeButtonActive,
-                  ]}
-                  onPress={() => setSelectedType(type)}
-                >
-                  <Text
-                    style={[
-                      styles.typeButtonText,
-                      selectedType === type && styles.typeButtonTextActive,
-                    ]}
-                  >
-                    {TYPE_LABELS[type]}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-
-          <TouchableOpacity
-            style={styles.qrToggle}
-            onPress={() => setGenerateQr(!generateQr)}
-          >
-            <Text style={styles.qrIcon}>{'📱'}</Text>
-            <View style={styles.qrTextContainer}>
-              <Text style={styles.qrTitle}>{commonMessages.vehicle.generateQr}</Text>
-              <Text style={styles.qrSubtitle}>{commonMessages.vehicle.qrDescription}</Text>
-            </View>
-            <View style={[styles.toggleTrack, generateQr ? styles.toggleTrackOn : styles.toggleTrackOff]}>
-              <View style={[styles.toggleThumb, generateQr ? styles.toggleThumbOn : styles.toggleThumbOff]} />
-            </View>
-          </TouchableOpacity>
+          <DetailRow icon="👤" label={commonMessages.vehicle.owner} value={lookupData.owner} delay={100} />
+          <DetailRow icon="🏭" label={commonMessages.vehicle.brand} value={lookupData.brand} delay={150} />
+          <DetailRow icon="🚗" label={commonMessages.vehicle.model} value={lookupData.model} delay={200} />
+          <DetailRow icon="📅" label={commonMessages.vehicle.year} value={String(lookupData.year)} delay={250} />
+          <DetailRow icon="🎨" label={commonMessages.vehicle.color} value={lookupData.color} delay={300} />
+          <DetailRow icon="⛽" label={commonMessages.vehicle.fuel} value={lookupData.fuelType} delay={350} />
+          <DetailRow icon="📍" label={commonMessages.vehicle.cityState} value={`${lookupData.city}/${lookupData.state}`} delay={400} />
+          <DetailRow icon="🔧" label={commonMessages.vehicle.chassi} value={maskValue(lookupData.chassi, 6, 4)} delay={450} />
+          <DetailRow icon="📋" label={commonMessages.vehicle.renavam} value={maskValue(lookupData.renavam, 4, 3)} delay={500} />
         </View>
 
         <TouchableOpacity
-          style={[styles.submitButton, { opacity: cleanPlate.length < 7 ? 0.5 : 1 }]}
-          onPress={handleSubmit}
-          disabled={cleanPlate.length < 7 || isSubmitting}
+          style={styles.qrToggle}
+          onPress={() => setGenerateQr(!generateQr)}
         >
-          <Text style={styles.submitButtonText}>
-            {isSubmitting ? 'Cadastrando...' : commonMessages.registerVehicle}
-          </Text>
+          <Text style={styles.qrIcon}>{'📱'}</Text>
+          <View style={styles.qrTextContainer}>
+            <Text style={styles.qrTitle}>{commonMessages.vehicle.generateQr}</Text>
+            <Text style={styles.qrSubtitle}>{commonMessages.vehicle.qrDescription}</Text>
+          </View>
+          <View style={[styles.toggleTrack, generateQr ? styles.toggleTrackOn : styles.toggleTrackOff]}>
+            <View style={[styles.toggleThumb, generateQr ? styles.toggleThumbOn : styles.toggleThumbOff]} />
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.submitButton, isSubmitting && { opacity: 0.5 }]}
+          onPress={handleSubmit}
+          disabled={isSubmitting}
+          activeOpacity={0.7}
+        >
+          {isSubmitting ? (
+            <View style={styles.loadingRow}>
+              <ActivityIndicator size="small" color={colors.surface} />
+              <Text style={styles.submitButtonText}>Cadastrando...</Text>
+            </View>
+          ) : (
+            <Text style={styles.submitButtonText}>{commonMessages.registerVehicle}</Text>
+          )}
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>

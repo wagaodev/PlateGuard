@@ -30,107 +30,59 @@ export const styles = StyleSheet.create({
     fontWeight: typography.weightSemiBold,
     color: colors.onSurface,
   },
-  headerStep: {
+  content: {
+    paddingHorizontal: spacing.md,
+  },
+  plateHero: {
+    alignItems: 'center',
+    backgroundColor: colors.surfaceContainerHigh,
+    borderRadius: radii.xl,
+    paddingVertical: spacing.lg,
+    paddingHorizontal: spacing.md,
+    borderWidth: 1,
+    borderColor: colors.outlineVariant,
+  },
+  lookupInfoText: {
     fontFamily: typography.fontBody,
     fontSize: typography.sizeLabelMd,
     color: colors.textSecondary,
-    marginLeft: 'auto',
-  },
-  content: {
-    paddingHorizontal: spacing.md,
+    marginTop: spacing.sm,
   },
   formCard: {
     backgroundColor: colors.surfaceContainer,
     borderRadius: radii.lg,
     padding: spacing.lg,
-    gap: spacing.md,
-  },
-  label: {
-    fontFamily: typography.fontBody,
-    fontSize: typography.sizeLabelMd,
-    color: colors.textSecondary,
-    textTransform: 'uppercase',
-    marginBottom: spacing.xs,
-  },
-  plateInput: {
-    backgroundColor: colors.surfaceContainerLow,
-    borderRadius: radii.sm,
-    borderBottomWidth: 2,
-    borderBottomColor: colors.outlineVariant,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm + 4,
-    fontFamily: typography.plateFont,
-    fontSize: typography.plateSize,
-    fontWeight: typography.plateWeight,
-    letterSpacing: typography.plateSpacing,
-    color: colors.onSurface,
-    textAlign: 'center',
-  },
-  plateInputFocused: {
-    borderBottomColor: colors.primary,
-    backgroundColor: colors.primaryMuted,
-  },
-  platePreview: {
-    alignItems: 'center',
-    paddingVertical: spacing.sm,
-  },
-  textInput: {
-    backgroundColor: colors.surfaceContainerLow,
-    borderRadius: radii.sm,
-    borderBottomWidth: 2,
-    borderBottomColor: colors.outlineVariant,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm + 4,
-    fontFamily: typography.fontBody,
-    fontSize: typography.sizeTitleSm,
-    color: colors.onSurface,
-  },
-  textInputFocused: {
-    borderBottomColor: colors.primary,
-    backgroundColor: colors.primaryMuted,
-  },
-  colorRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
     gap: spacing.sm,
   },
-  colorPill: {
-    borderRadius: radii.full,
-    paddingVertical: spacing.xs,
-    paddingHorizontal: spacing.md,
-    backgroundColor: colors.surfaceContainerLow,
-  },
-  colorPillSelected: {
-    borderWidth: 2,
-    borderColor: colors.primary,
-  },
-  colorPillText: {
-    fontFamily: typography.fontBody,
-    fontSize: typography.sizeLabelMd,
-    color: colors.onSurface,
-  },
-  typeRow: {
+  detailRow: {
     flexDirection: 'row',
-    backgroundColor: colors.surfaceContainerHigh,
-    borderRadius: radii.sm,
-    overflow: 'hidden',
-  },
-  typeButton: {
-    flex: 1,
-    paddingVertical: spacing.sm,
     alignItems: 'center',
+    paddingVertical: spacing.sm,
+    gap: spacing.sm,
   },
-  typeButtonActive: {
-    backgroundColor: colors.surfaceContainer,
+  detailIcon: {
+    fontSize: 18,
+    width: 28,
+    textAlign: 'center',
   },
-  typeButtonText: {
+  detailContent: {
+    flex: 1,
+  },
+  detailLabel: {
+    fontFamily: typography.fontBody,
+    fontSize: typography.sizeLabelSm,
+    color: colors.textSecondary,
+    textTransform: 'uppercase',
+  },
+  detailValue: {
     fontFamily: typography.fontBody,
     fontSize: typography.sizeTitleSm,
-    color: colors.textSecondary,
+    color: colors.onSurface,
+    fontWeight: typography.weightMedium,
   },
-  typeButtonTextActive: {
-    color: colors.primary,
-    fontWeight: typography.weightSemiBold,
+  lockIcon: {
+    fontSize: 12,
+    opacity: 0.4,
   },
   qrToggle: {
     backgroundColor: colors.surfaceContainerLow,
@@ -189,7 +141,6 @@ export const styles = StyleSheet.create({
     borderRadius: radii.lg,
     paddingVertical: spacing.md,
     alignItems: 'center',
-    marginTop: spacing.md,
     borderTopWidth: 1,
     borderTopColor: 'rgba(255, 255, 255, 0.25)',
     ...shadows.primaryButtonGlow,
@@ -198,6 +149,11 @@ export const styles = StyleSheet.create({
     fontFamily: typography.fontBody,
     fontSize: typography.sizeTitleMd,
     fontWeight: typography.weightSemiBold,
-    color: '#0e1322',
+    color: colors.surface,
+  },
+  loadingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
   },
 });

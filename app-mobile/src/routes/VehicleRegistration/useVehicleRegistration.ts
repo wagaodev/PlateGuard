@@ -1,70 +1,49 @@
-import { useCallback, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useState, useCallback } from 'react';
 import { Alert } from 'react-native';
-import { useCreateVehicle } from '../../service/vehicleAccess/useValidatePlate';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../types/navigation.types';
-import { useUserStore } from '../../store/userStore';
+import { useCreateVehicle } from '../../service/vehicleAccess/useValidatePlate';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
-
-const VEHICLE_COLORS = ['Branco', 'Prata', 'Preto', 'Vermelho', 'Azul', 'Cinza'];
-const VEHICLE_TYPES = ['car', 'motorcycle', 'truck'] as const;
+type Route = RouteProp<RootStackParamList, 'VehicleRegistration'>;
 
 export function useVehicleRegistration() {
   const navigation = useNavigation<Nav>();
-  const { name: ownerName } = useUserStore();
+  const route = useRoute<Route>();
+  const { lookupData } = route.params;
   const createMutation = useCreateVehicle();
-
-  const [plate, setPlate] = useState('');
-  const [model, setModel] = useState('');
-  const [selectedColor, setSelectedColor] = useState('Branco');
-  const [selectedType, setSelectedType] = useState<string>('car');
   const [generateQr, setGenerateQr] = useState(true);
 
   const handleSubmit = useCallback(async () => {
-    const cleanPlate = plate.toUpperCase().replace(/[^A-Z0-9]/g, '');
-    if (cleanPlate.length < 7) {
-      Alert.alert('Placa inválida', 'Insira uma placa com 7 caracteres');
-      return;
-    }
-
     try {
       await createMutation.mutateAsync({
-        plate: cleanPlate,
-        ownerName,
-        vehicleType: selectedType,
-        vehicleModel: model || undefined,
-        vehicleColor: selectedColor,
+        plate: lookupData.plate,
+        ownerName: lookupData.owner,
+        vehicleType: 'car',
+        vehicleModel: `${lookupData.brand} ${lookupData.model}`,
+        vehicleColor: lookupData.color,
         generateQrCode: generateQr,
       });
       Alert.alert('Sucesso', 'Veículo cadastrado com sucesso', [
-        { text: 'OK', onPress: () => navigation.goBack() },
+        { text: 'OK', onPress: () => navigation.popToTop() },
       ]);
     } catch {
       Alert.alert('Erro', 'Não foi possível cadastrar o veículo');
     }
-  }, [plate, model, selectedColor, selectedType, generateQr, ownerName, createMutation, navigation]);
+  }, [lookupData, generateQr, createMutation, navigation]);
 
   const handleGoBack = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
 
   return {
-    plate,
-    setPlate,
-    model,
-    setModel,
-    selectedColor,
-    setSelectedColor,
-    selectedType,
-    setSelectedType,
+    lookupData,
     generateQr,
     setGenerateQr,
     handleSubmit,
     handleGoBack,
     isSubmitting: createMutation.isPending,
-    vehicleColors: VEHICLE_COLORS,
-    vehicleTypes: VEHICLE_TYPES,
   };
 }

@@ -76,7 +76,7 @@ export const styles = StyleSheet.create({
     fontFamily: typography.fontBody,
     fontSize: typography.sizeTitleMd,
     fontWeight: typography.weightSemiBold,
-    color: '#0e1322',
+    color: colors.surface,
   },
   simulateContainer: {
     gap: spacing.sm,

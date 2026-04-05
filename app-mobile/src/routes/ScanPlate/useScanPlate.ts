@@ -12,7 +12,11 @@ export function useScanPlate() {
   const navigation = useNavigation<Nav>();
   const { scanMode, setScanMode, setScanState } = useVehicleAccessStore();
   const validateMutation = useValidatePlate();
-  const [manualPlate, setManualPlate] = useState('');
+  const [manualPlate, setManualPlateRaw] = useState('');
+
+  const setManualPlate = useCallback((text: string) => {
+    setManualPlateRaw(text.toUpperCase().replace(/[^A-Z0-9]/g, ''));
+  }, []);
   const [showManualInput, setShowManualInput] = useState(false);
 
   const handleModeChange = useCallback((mode: ScanMode) => {

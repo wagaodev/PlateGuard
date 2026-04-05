@@ -8,19 +8,13 @@ import { RootStackParamList, BottomTabParamList } from '../types/navigation.type
 import { ScanPlateScreen } from './ScanPlate';
 import { FeedbackScreen } from './Feedback';
 import { ProfileScreen } from './Profile';
+import { PlateCaptureScreen } from './PlateCapture';
 import { VehicleRegistrationScreen } from './VehicleRegistration';
+import { VehiclesScreen } from './Vehicles';
 import { commonMessages } from '../locales/pt-BR/common';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab   = createBottomTabNavigator<BottomTabParamList>();
-
-function VehiclesPlaceholder() {
-  return (
-    <View style={styles.placeholder}>
-      <Text style={styles.placeholderText}>Veículos (Fase 2)</Text>
-    </View>
-  );
-}
 
 function TabIcon({ label, focused }: { label: string; focused: boolean }) {
   const icons: Record<string, string> = {
@@ -59,7 +53,7 @@ function BottomTabNavigator() {
       />
       <Tab.Screen
         name="Vehicles"
-        component={VehiclesPlaceholder}
+        component={VehiclesScreen}
         options={{
           tabBarLabel: commonMessages.tabs.vehicles,
           tabBarIcon: ({ focused }) => <TabIcon label="Vehicles" focused={focused} />,
@@ -89,6 +83,7 @@ export function RootNavigator() {
       >
         <Stack.Screen name="BottomTabs" component={BottomTabNavigator} />
         <Stack.Screen name="Feedback" component={FeedbackScreen} />
+        <Stack.Screen name="PlateCapture" component={PlateCaptureScreen} />
         <Stack.Screen name="VehicleRegistration" component={VehicleRegistrationScreen} />
       </Stack.Navigator>
     </NavigationContainer>
@@ -119,16 +114,5 @@ const styles = StyleSheet.create({
     height: 2,
     backgroundColor: colors.primary,
     borderRadius: radii.full,
-  },
-  placeholder: {
-    flex: 1,
-    backgroundColor: colors.surfaceDim,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  placeholderText: {
-    fontFamily: typography.fontBody,
-    fontSize: typography.sizeTitleMd,
-    color: colors.textSecondary,
   },
 });

@@ -187,7 +187,7 @@ export const styles = StyleSheet.create({
     fontFamily: typography.fontBody,
     fontSize: typography.sizeLabelSm,
     fontWeight: typography.weightBold,
-    color: '#0e1322',
+    color: colors.surface,
   },
   logoutLabel: {
     color: colors.error,
