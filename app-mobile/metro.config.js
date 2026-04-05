@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 
 /**
@@ -6,6 +8,10 @@ const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
  *
  * @type {import('@react-native/metro-config').MetroConfig}
  */
-const config = {};
+const config = {
+  server: {
+    port: parseInt(process.env.METRO_PORT || '5000', 10),
+  },
+};
 
 module.exports = mergeConfig(getDefaultConfig(__dirname), config);
