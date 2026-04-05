@@ -13,7 +13,7 @@ import { commonMessages } from '../../locales/pt-BR/common';
 import { useScanPlate } from './useScanPlate';
 import { styles } from './styles';
 
-const DEMO_PLATES = ['BRA2E19', 'ABC3D45', 'XYZ1234', 'BLQ9A87', 'ZZZ9Z99'];
+const DEMO_PLATES = ['BRA2O26', 'ABC3D45', 'XYZ1234', 'BLQ9A87', 'QTF6E90'];
 
 export function ScanPlateScreen() {
   const {

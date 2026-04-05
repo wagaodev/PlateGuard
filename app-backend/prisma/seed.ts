@@ -9,7 +9,7 @@ async function main() {
 
   const vehicles = [
     {
-      plate: 'BRA2E19',
+      plate: 'BRA2O26',
       ownerName: 'Wagner Barboza',
       vehicleType: 'car',
       vehicleModel: 'Honda Civic',
@@ -80,7 +80,7 @@ async function main() {
 
   const lookups = [
     {
-      plate: 'BRA2E19',
+      plate: 'BRA2O26',
       brand: 'Honda',
       model: 'Civic EXL 2.0',
       year: 2021,
@@ -145,6 +145,21 @@ async function main() {
       renavam: '56789012345',
     },
   ];
+
+  // QTF6E90 — placa real do Wagner, existe apenas no DETRAN (não registrada no app)
+  lookups.push({
+    plate: 'QTF6E90',
+    brand: 'Volkswagen',
+    model: 'Passat Highline 2.0 TSI',
+    year: 2018,
+    color: 'Branco',
+    owner: 'Wagner Barboza Goulart',
+    fuelType: 'Gasolina',
+    city: 'Gravataí',
+    state: 'RS',
+    chassi: '9BWZZZ377VT004251',
+    renavam: '12345678901',
+  });
 
   for (const lookup of lookups) {
     await prisma.vehicleLookup.create({ data: lookup });

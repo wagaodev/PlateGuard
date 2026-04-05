@@ -30,7 +30,7 @@ describe('VehicleAccess (e2e)', () => {
     if (count === 0) {
       await prisma.vehicle.create({
         data: {
-          plate: 'BRA2E19',
+          plate: 'BRA2O26',
           ownerName: 'Wagner Barboza',
           vehicleType: 'car',
           vehicleModel: 'Honda Civic',
@@ -74,7 +74,7 @@ describe('VehicleAccess (e2e)', () => {
     it('should return 200 ALLOWED for a registered plate', () => {
       return request(app.getHttpServer())
         .post('/vehicle-access/validate')
-        .send({ plate: 'BRA2E19', entryMethod: 'CAMERA' })
+        .send({ plate: 'BRA2O26', entryMethod: 'CAMERA' })
         .expect(200)
         .expect((res) => {
           expect(res.body.feedbackType).toBe('ALLOWED');
@@ -171,12 +171,12 @@ describe('VehicleAccess (e2e)', () => {
 
     it('should filter by plate', () => {
       return request(app.getHttpServer())
-        .get('/access-logs?plate=BRA2E19')
+        .get('/access-logs?plate=BRA2O26')
         .expect(200)
         .expect((res) => {
           expect(Array.isArray(res.body)).toBe(true);
           for (const log of res.body) {
-            expect(log.plate).toBe('BRA2E19');
+            expect(log.plate).toBe('BRA2O26');
           }
         });
     });
