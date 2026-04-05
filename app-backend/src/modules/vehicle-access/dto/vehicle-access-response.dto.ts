@@ -8,7 +8,9 @@ export type FeedbackType =
   | 'SERVER_ERROR';
 
 export class VehicleAccessResponseDto {
-  @ApiProperty({ enum: ['ALLOWED', 'DENIED', 'NOT_FOUND', 'INVALID_PLATE', 'SERVER_ERROR'] })
+  @ApiProperty({
+    enum: ['ALLOWED', 'DENIED', 'NOT_FOUND', 'INVALID_PLATE', 'SERVER_ERROR'],
+  })
   feedbackType!: FeedbackType;
 
   @ApiProperty()

@@ -9,7 +9,11 @@ export class AccessLogController {
 
   @Get()
   @ApiOperation({ summary: 'Listar histórico de acessos' })
-  @ApiQuery({ name: 'plate', required: false, description: 'Filtrar por placa' })
+  @ApiQuery({
+    name: 'plate',
+    required: false,
+    description: 'Filtrar por placa',
+  })
   async findAll(@Query('plate') plate?: string) {
     if (plate) {
       return this.service.getByPlate(plate.toUpperCase());

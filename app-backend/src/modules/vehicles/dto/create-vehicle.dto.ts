@@ -38,13 +38,19 @@ export class CreateVehicleDto {
   @IsString()
   vehicleColor?: string;
 
-  @ApiPropertyOptional({ example: 'resident', enum: ['resident', 'visitor', 'blocked'] })
+  @ApiPropertyOptional({
+    example: 'resident',
+    enum: ['resident', 'visitor', 'blocked'],
+  })
   @IsOptional()
   @IsString()
   @IsIn(['resident', 'visitor', 'blocked'])
   accessType?: string;
 
-  @ApiPropertyOptional({ example: true, description: 'Gerar QR Code para o veículo' })
+  @ApiPropertyOptional({
+    example: true,
+    description: 'Gerar QR Code para o veículo',
+  })
   @IsOptional()
   @IsBoolean()
   generateQrCode?: boolean;

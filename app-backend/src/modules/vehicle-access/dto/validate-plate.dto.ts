@@ -1,4 +1,10 @@
-import { IsString, IsNotEmpty, Matches, IsOptional, IsIn } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  Matches,
+  IsOptional,
+  IsIn,
+} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class ValidatePlateDto {
@@ -9,7 +15,8 @@ export class ValidatePlateDto {
   @IsString()
   @IsNotEmpty()
   @Matches(/^[A-Z]{3}[0-9][A-Z0-9][0-9]{2}$/, {
-    message: 'Formato de placa inválido. Use Mercosul (AAA0A00) ou antigo (AAA0000)',
+    message:
+      'Formato de placa inválido. Use Mercosul (AAA0A00) ou antigo (AAA0000)',
   })
   plate!: string;
 

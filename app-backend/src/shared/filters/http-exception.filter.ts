@@ -27,7 +27,8 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       if (typeof exceptionResponse === 'object' && exceptionResponse !== null) {
         const resp = exceptionResponse as Record<string, unknown>;
         message = (resp['message'] as string | string[]) ?? message;
-        feedbackType = (resp['feedbackType'] as string) ?? this.inferFeedbackType(status);
+        feedbackType =
+          (resp['feedbackType'] as string) ?? this.inferFeedbackType(status);
       } else if (typeof exceptionResponse === 'string') {
         message = exceptionResponse;
       }
@@ -47,15 +48,9 @@ export class GlobalExceptionFilter implements ExceptionFilter {
   }
 
   private inferFeedbackType(status: number): string {
-    switch (status) {
-      case HttpStatus.BAD_REQUEST:
-        return 'INVALID_PLATE';
-      case HttpStatus.FORBIDDEN:
-        return 'DENIED';
-      case HttpStatus.NOT_FOUND:
-        return 'NOT_FOUND';
-      default:
-        return 'SERVER_ERROR';
-    }
+    if (status === Number(HttpStatus.BAD_REQUEST)) return 'INVALID_PLATE';
+    if (status === Number(HttpStatus.FORBIDDEN)) return 'DENIED';
+    if (status === Number(HttpStatus.NOT_FOUND)) return 'NOT_FOUND';
+    return 'SERVER_ERROR';
   }
 }
