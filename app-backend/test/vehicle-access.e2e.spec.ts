@@ -51,6 +51,10 @@ describe('VehicleAccess (e2e)', () => {
   });
 
   afterAll(async () => {
+    // Cleanup test-created vehicles
+    await prisma.vehicle.deleteMany({
+      where: { plate: { in: ['TST1A23', 'DUP1A23'] } },
+    });
     await app.close();
   });
 
@@ -109,9 +113,13 @@ describe('VehicleAccess (e2e)', () => {
   });
 
   describe('POST /vehicles', () => {
-    it('should create a new vehicle', () => {
-      const plate = `TST${Math.random().toString(36).substring(2, 3).toUpperCase()}${Math.floor(Math.random() * 10)}${Math.random().toString(36).substring(2, 3).toUpperCase()}${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}`;
+    beforeEach(async () => {
+      await prisma.vehicle.deleteMany({
+        where: { plate: { in: ['TST1A23', 'DUP1A23'] } },
+      });
+    });
 
+    it('should create a new vehicle', () => {
       return request(app.getHttpServer())
         .post('/vehicles')
         .send({
