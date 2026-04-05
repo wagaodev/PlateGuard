@@ -14,7 +14,9 @@ export class VehiclesService {
   async create(dto: CreateVehicleDto) {
     const existing = await this.repository.findByPlate(dto.plate.toUpperCase());
     if (existing) {
-      throw new ConflictException(`Veículo com placa ${dto.plate} já cadastrado`);
+      throw new ConflictException(
+        `Veículo com placa ${dto.plate} já cadastrado`,
+      );
     }
 
     const accessType = dto.accessType ?? 'resident';
@@ -42,5 +44,13 @@ export class VehiclesService {
       throw new NotFoundException(`Veículo com placa ${plate} não encontrado`);
     }
     return vehicle;
+  }
+
+  async deleteByPlate(plate: string) {
+    const vehicle = await this.repository.findByPlate(plate.toUpperCase());
+    if (!vehicle) {
+      throw new NotFoundException(`Veículo com placa ${plate} não encontrado`);
+    }
+    return this.repository.deleteByPlate(plate.toUpperCase());
   }
 }

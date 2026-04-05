@@ -19,4 +19,8 @@ export class VehiclesRepository {
   async findByPlate(plate: string) {
     return this.prisma.vehicle.findUnique({ where: { plate } });
   }
+
+  async deleteByPlate(plate: string) {
+    return this.prisma.vehicle.delete({ where: { plate } });
+  }
 }
