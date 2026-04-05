@@ -1,9 +1,11 @@
 import { VehicleAccessResponse } from './vehicleAccess.types';
+import { VehicleLookupResponse } from './vehicleLookup.types';
 
 export type RootStackParamList = {
   BottomTabs:          undefined;
   Feedback:            { result: VehicleAccessResponse };
-  VehicleRegistration: undefined;
+  PlateCapture:        undefined;
+  VehicleRegistration: { lookupData: VehicleLookupResponse };
 };
 
 export type BottomTabParamList = {

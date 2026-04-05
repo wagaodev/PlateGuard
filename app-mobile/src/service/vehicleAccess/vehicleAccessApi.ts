@@ -70,3 +70,12 @@ export async function createVehicle(payload: CreateVehiclePayload) {
   });
   return data;
 }
+
+export async function fetchVehicles() {
+  const { data } = await api.get('/vehicles');
+  return data;
+}
+
+export async function deleteVehicle(plate: string) {
+  await api.delete(`/vehicles/${plate.toUpperCase().replace(/\s/g, '')}`);
+}
