@@ -5,6 +5,15 @@
   "private": true,
   "scripts": {
     "prepare": "husky",
+    "setup": "bash app-backend/scripts/prepare.sh && bash app-mobile/scripts/prepare.sh",
+    "setup:backend": "bash app-backend/scripts/prepare.sh",
+    "setup:mobile": "bash app-mobile/scripts/prepare.sh",
+    "clean": "cd app-backend && yarn clean && cd ../app-mobile && yarn clean",
+    "clean:backend": "cd app-backend && yarn clean",
+    "clean:mobile": "cd app-mobile && yarn clean",
+    "rebuild": "yarn clean && yarn setup",
+    "rebuild:backend": "cd app-backend && yarn clean && bash scripts/prepare.sh",
+    "rebuild:mobile": "cd app-mobile && yarn clean && bash scripts/prepare.sh",
     "lint:backend": "cd app-backend && npm run lint",
     "lint:mobile": "cd app-mobile && npx eslint . --ext .ts,.tsx",
     "typecheck:backend": "cd app-backend && npx tsc --noEmit",
@@ -34,5 +43,6 @@
   "devDependencies": {
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
