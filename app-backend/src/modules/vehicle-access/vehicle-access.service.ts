@@ -19,6 +19,9 @@ export class VehicleAccessService {
   ): Promise<VehicleAccessResponseDto> {
     const normalizedPlate = plate.toUpperCase().replace(/[^A-Z0-9]/g, '');
 
+    // Simulates processing latency (2s)
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     const vehicle = await this.repository.findByPlate(normalizedPlate);
 
     let response: VehicleAccessResponseDto;

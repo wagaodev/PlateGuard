@@ -12,6 +12,9 @@ export class VehiclesService {
   constructor(private readonly repository: VehiclesRepository) {}
 
   async create(dto: CreateVehicleDto) {
+    // Simulates processing latency (2s)
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     const existing = await this.repository.findByPlate(dto.plate.toUpperCase());
     if (existing) {
       throw new ConflictException(

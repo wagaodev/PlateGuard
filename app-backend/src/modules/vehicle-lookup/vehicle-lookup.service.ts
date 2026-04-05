@@ -9,10 +9,8 @@ export class VehicleLookupService {
   async lookupByPlate(plate: string): Promise<VehicleLookupResponseDto> {
     const normalized = plate.toUpperCase().replace(/[^A-Z0-9]/g, '');
 
-    // Simulates external DETRAN API latency
-    await new Promise((resolve) =>
-      setTimeout(resolve, 800 + Math.random() * 700),
-    );
+    // Simulates external DETRAN API latency (2s)
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     const record = await this.repository.findByPlate(normalized);
 

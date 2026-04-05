@@ -33,8 +33,12 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>PlateGuard precisa acessar a câmera para escanear placas veiculares</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>PlateGuard precisa acessar suas fotos para definir sua foto de perfil</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>PlateGuard pode usar sua localização para identificar a portaria mais próxima</string>
 	<key>RCTNewArchEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
