@@ -1,10 +1,10 @@
 import { useCallback } from 'react';
-import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useVehicles as useVehiclesQuery, useDeleteVehicle } from '../../service/vehicleAccess/useValidatePlate';
 import { RootStackParamList } from '../../types/navigation.types';
 import { commonMessages } from '../../locales/pt-BR/common';
+import { useCustomAlert } from '../../hooks/useCustomAlert';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 
@@ -12,9 +12,10 @@ export function useVehiclesList() {
   const navigation = useNavigation<Nav>();
   const vehiclesQuery = useVehiclesQuery();
   const deleteMutation = useDeleteVehicle();
+  const { alert, AlertComponent } = useCustomAlert();
 
   const handleDelete = useCallback((plate: string) => {
-    Alert.alert(
+    alert(
       'Remover veículo',
       commonMessages.vehicle.deleteConfirm,
       [
@@ -26,13 +27,16 @@ export function useVehiclesList() {
             try {
               await deleteMutation.mutateAsync(plate);
             } catch {
-              Alert.alert('Erro', 'Não foi possível remover o veículo');
+              alert('Erro', 'Não foi possível remover o veículo', [
+                { text: 'OK' },
+              ], '❌');
             }
           },
         },
       ],
+      '🗑️',
     );
-  }, [deleteMutation]);
+  }, [deleteMutation, alert]);
 
   const handleAddVehicle = useCallback(() => {
     navigation.navigate('PlateCapture');
@@ -45,5 +49,6 @@ export function useVehiclesList() {
     refetch: vehiclesQuery.refetch,
     handleDelete,
     handleAddVehicle,
+    AlertComponent,
   };
 }

@@ -1,10 +1,10 @@
 import { useState, useCallback } from 'react';
-import { Alert } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute, CommonActions } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../types/navigation.types';
 import { useCreateVehicle } from '../../service/vehicleAccess/useValidatePlate';
+import { useCustomAlert } from '../../hooks/useCustomAlert';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 type Route = RouteProp<RootStackParamList, 'VehicleRegistration'>;
@@ -15,6 +15,16 @@ export function useVehicleRegistration() {
   const { lookupData } = route.params;
   const createMutation = useCreateVehicle();
   const [generateQr, setGenerateQr] = useState(true);
+  const { alert, AlertComponent } = useCustomAlert();
+
+  const navigateToVehicles = useCallback(() => {
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: 'BottomTabs', state: { routes: [{ name: 'Scanner' }, { name: 'Vehicles' }, { name: 'Profile' }], index: 1 } }],
+      }),
+    );
+  }, [navigation]);
 
   const handleSubmit = useCallback(async () => {
     try {
@@ -26,13 +36,15 @@ export function useVehicleRegistration() {
         vehicleColor: lookupData.color,
         generateQrCode: generateQr,
       });
-      Alert.alert('Sucesso', 'Veículo cadastrado com sucesso', [
-        { text: 'OK', onPress: () => navigation.popToTop() },
-      ]);
+      alert('Veículo cadastrado', 'Seu veículo foi adicionado com sucesso.', [
+        { text: 'Ver meus veículos', onPress: navigateToVehicles },
+      ], '✅');
     } catch {
-      Alert.alert('Erro', 'Não foi possível cadastrar o veículo');
+      alert('Erro', 'Não foi possível cadastrar o veículo. Tente novamente.', [
+        { text: 'OK' },
+      ], '❌');
     }
-  }, [lookupData, generateQr, createMutation, navigation]);
+  }, [lookupData, generateQr, createMutation, navigateToVehicles, alert]);
 
   const handleGoBack = useCallback(() => {
     navigation.goBack();
@@ -45,5 +57,6 @@ export function useVehicleRegistration() {
     handleSubmit,
     handleGoBack,
     isSubmitting: createMutation.isPending,
+    AlertComponent,
   };
 }

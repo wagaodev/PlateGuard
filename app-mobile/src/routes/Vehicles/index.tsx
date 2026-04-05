@@ -37,7 +37,7 @@ function StatusBadge({ status }: { status: string }) {
 }
 
 export function VehiclesScreen() {
-  const { vehicles, isLoading, isRefetching, refetch, handleDelete, handleAddVehicle } = useVehiclesList();
+  const { vehicles, isLoading, isRefetching, refetch, handleDelete, handleAddVehicle, AlertComponent } = useVehiclesList();
 
   const renderDeleteAction = (plate: string) => (
     <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(plate)}>
@@ -98,6 +98,7 @@ export function VehiclesScreen() {
           </TouchableOpacity>
         }
       />
+      {AlertComponent}
     </SafeAreaView>
   );
 }

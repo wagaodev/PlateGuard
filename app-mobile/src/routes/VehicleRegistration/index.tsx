@@ -46,6 +46,7 @@ export function VehicleRegistrationScreen() {
     handleSubmit,
     handleGoBack,
     isSubmitting,
+    AlertComponent,
   } = useVehicleRegistration();
 
   const fadeHero = useFadeInAnimation(0);
@@ -107,6 +108,7 @@ export function VehicleRegistrationScreen() {
           )}
         </TouchableOpacity>
       </ScrollView>
+      {AlertComponent}
     </SafeAreaView>
   );
 }
