@@ -7,7 +7,7 @@ RUN npm ci
 
 COPY prisma ./prisma/
 COPY prisma.config.ts ./
-RUN npx prisma generate
+RUN DATABASE_URL="file:./data/plateguard.db" npx prisma generate
 
 COPY tsconfig*.json nest-cli.json ./
 COPY src ./src/
@@ -28,6 +28,6 @@ COPY prisma.config.ts ./
 
 RUN apk add --no-cache curl
 
-EXPOSE 3000
+EXPOSE 5001
 
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/src/main.js"]
+CMD ["sh", "-c", "DATABASE_URL=$DATABASE_URL npx prisma migrate deploy && node dist/src/main.js"]

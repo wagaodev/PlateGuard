@@ -5,4 +5,4 @@ const IOS_LOCALHOST = 'localhost';
 
 const host = Platform.OS === 'android' ? ANDROID_LOCALHOST : IOS_LOCALHOST;
 
-export const API_BASE_URL = `http://${host}:3000`;
+export const API_BASE_URL = `http://${host}:5001`;

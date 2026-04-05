@@ -1,14 +1,21 @@
+name: plate-guard
+
 services:
-  api:
+  app-backend:
+    container_name: app-backend
     build: .
     ports:
-      - "3000:3000"
+      - "5001:5001"
     volumes:
       - ./data:/app/data
-    env_file:
-      - .env
+    environment:
+      - NODE_ENV=development
+      - PORT=5001
+      - DATABASE_URL=file:./data/plateguard.db
+      - THROTTLE_TTL=60
+      - THROTTLE_LIMIT=10
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      test: [ "CMD", "curl", "-f", "http://localhost:5001/health" ]
       interval: 30s
       timeout: 10s
       retries: 3
