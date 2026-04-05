@@ -8,6 +8,7 @@ import { VehicleAccessModule } from './modules/vehicle-access/vehicle-access.mod
 import { VehiclesModule } from './modules/vehicles/vehicles.module';
 import { AccessLogModule } from './modules/access-log/access-log.module';
 import { HealthModule } from './modules/health/health.module';
+import { VehicleLookupModule } from './modules/vehicle-lookup/vehicle-lookup.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { HealthModule } from './modules/health/health.module';
     VehicleAccessModule,
     VehiclesModule,
     AccessLogModule,
+    VehicleLookupModule,
     HealthModule,
   ],
   providers: [

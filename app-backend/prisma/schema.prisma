@@ -32,3 +32,20 @@ model AccessLog {
   vehiclePlate String?
   vehicle      Vehicle? @relation(fields: [vehiclePlate], references: [plate])
 }
+
+model VehicleLookup {
+  id        String   @id @default(uuid())
+  plate     String   @unique
+  brand     String
+  model     String
+  year      Int
+  color     String
+  owner     String
+  fuelType  String
+  city      String
+  state     String
+  chassi    String
+  renavam   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
