@@ -4,7 +4,6 @@ import {
   Body,
   HttpCode,
   HttpStatus,
-  BadRequestException,
   ForbiddenException,
   NotFoundException,
 } from '@nestjs/common';
@@ -22,11 +21,17 @@ export class VehicleAccessController {
   @Post('validate')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Validar acesso de veículo por placa' })
-  @ApiResponse({ status: 200, description: 'Acesso liberado', type: VehicleAccessResponseDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Acesso liberado',
+    type: VehicleAccessResponseDto,
+  })
   @ApiResponse({ status: 403, description: 'Acesso negado' })
   @ApiResponse({ status: 404, description: 'Placa não encontrada' })
   @ApiResponse({ status: 400, description: 'Formato de placa inválido' })
-  async validate(@Body() dto: ValidatePlateDto): Promise<VehicleAccessResponseDto> {
+  async validate(
+    @Body() dto: ValidatePlateDto,
+  ): Promise<VehicleAccessResponseDto> {
     const result = await this.service.validatePlate(
       dto.plate,
       dto.entryMethod ?? 'CAMERA',
@@ -52,10 +57,16 @@ export class VehicleAccessController {
   @Post('validate-qr')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Validar acesso de veículo por QR Code' })
-  @ApiResponse({ status: 200, description: 'Acesso liberado', type: VehicleAccessResponseDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Acesso liberado',
+    type: VehicleAccessResponseDto,
+  })
   @ApiResponse({ status: 403, description: 'Acesso negado' })
   @ApiResponse({ status: 404, description: 'QR Code não encontrado' })
-  async validateQr(@Body() dto: ValidateQrDto): Promise<VehicleAccessResponseDto> {
+  async validateQr(
+    @Body() dto: ValidateQrDto,
+  ): Promise<VehicleAccessResponseDto> {
     const result = await this.service.validateQrCode(dto.token);
 
     if (result.feedbackType === 'DENIED') {
