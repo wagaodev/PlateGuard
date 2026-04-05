@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { zustandMMKVStorage } from './mmkv';
 
 interface UserState {
   name:      string;
@@ -21,7 +21,7 @@ export const useUserStore = create<UserState>()(
     }),
     {
       name: 'user-store',
-      storage: createJSONStorage(() => AsyncStorage),
+      storage: createJSONStorage(() => zustandMMKVStorage),
       partialize: (state) => ({ avatarUri: state.avatarUri }),
     },
   ),

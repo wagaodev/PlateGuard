@@ -22,10 +22,6 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        // AsyncStorage v3 ships storage-android via local Maven repo
-        maven {
-            url "$rootDir/../node_modules/@react-native-async-storage/async-storage/android/local_repo"
-        }
     }
 }
 

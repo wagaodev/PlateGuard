@@ -1,14 +1,13 @@
-jest.mock('@react-native-async-storage/async-storage', () => ({
-  setItem: jest.fn(() => Promise.resolve()),
-  getItem: jest.fn(() => Promise.resolve(null)),
-  removeItem: jest.fn(() => Promise.resolve()),
-  mergeItem: jest.fn(() => Promise.resolve()),
-  clear: jest.fn(() => Promise.resolve()),
-  getAllKeys: jest.fn(() => Promise.resolve([])),
-  multiGet: jest.fn(() => Promise.resolve([])),
-  multiSet: jest.fn(() => Promise.resolve()),
-  multiRemove: jest.fn(() => Promise.resolve()),
-  multiMerge: jest.fn(() => Promise.resolve()),
+const mockStorage = new Map<string, string>();
+
+jest.mock('react-native-mmkv', () => ({
+  createMMKV: jest.fn(() => ({
+    getString: (key: string) => mockStorage.get(key),
+    set: (key: string, value: string) => mockStorage.set(key, value),
+    remove: (key: string) => mockStorage.delete(key),
+    getAllKeys: () => [...mockStorage.keys()],
+    clearAll: () => mockStorage.clear(),
+  })),
 }));
 
 import { useUserStore } from '../userStore';
@@ -17,6 +16,7 @@ const store = useUserStore;
 
 describe('useUserStore', () => {
   beforeEach(() => {
+    mockStorage.clear();
     store.setState({
       name: 'Wagner Barboza',
       role: 'Morador',
