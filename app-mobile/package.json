@@ -9,6 +9,7 @@
     "start": "./scripts/ensure-node.sh react-native start",
     "android": "./scripts/ensure-node.sh react-native run-android",
     "ios": "./scripts/ensure-node.sh react-native run-ios",
+    "ios:device": "./scripts/ensure-node.sh react-native run-ios --device \"IPhone do Wagão\"",
     "lint": "eslint .",
     "test": "jest"
   },
