@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,7 +8,6 @@ import { LoadingOverlay } from '../../components/LoadingOverlay';
 import { commonMessages } from '../../locales/pt-BR/common';
 import { colors } from '../../theme/tokens';
 import { useVehicleRegistration } from './useVehicleRegistration';
-import { VEHICLE_COLOR_DOTS, VEHICLE_TYPES, resolveActiveColor, resolveVehicleType } from './vehicleRegistration.config';
 import { styles } from './styles';
 
 export function VehicleRegistrationScreen() {
@@ -19,6 +18,11 @@ export function VehicleRegistrationScreen() {
     handleSubmit,
     handleGoBack,
     isSubmitting,
+    activeColorHex,
+    activeType,
+    modelDisplay,
+    colorDots,
+    vehicleTypes,
     AlertComponent,
   } = useVehicleRegistration();
 
@@ -28,18 +32,6 @@ export function VehicleRegistrationScreen() {
   const fadeSection3 = useFadeInAnimation(300);
   const fadeSection4 = useFadeInAnimation(400);
   const fadeSection5 = useFadeInAnimation(500);
-
-  const activeColorHex = useMemo(
-    () => resolveActiveColor(lookupData.color),
-    [lookupData.color],
-  );
-
-  const activeType = useMemo(
-    () => resolveVehicleType(lookupData.model),
-    [lookupData.model],
-  );
-
-  const modelDisplay = `${lookupData.brand} ${lookupData.model}`.trim();
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -86,7 +78,7 @@ export function VehicleRegistrationScreen() {
         <Animated.View style={[styles.colorSection, fadeSection2]}>
           <Text style={styles.sectionLabel}>{commonMessages.vehicle.color}</Text>
           <View style={styles.colorDotsRow}>
-            {VEHICLE_COLOR_DOTS.map((c) => {
+            {colorDots.map((c) => {
               const isActive = activeColorHex === c.hex;
               return (
                 <View
@@ -109,7 +101,7 @@ export function VehicleRegistrationScreen() {
         <Animated.View style={[styles.typeSection, fadeSection3]}>
           <Text style={styles.sectionLabel}>{commonMessages.vehicle.vehicleType}</Text>
           <View style={styles.segmentedControl}>
-            {VEHICLE_TYPES.map((t) => {
+            {vehicleTypes.map((t) => {
               const isActive = t.key === activeType;
               return (
                 <View

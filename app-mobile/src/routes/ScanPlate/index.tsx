@@ -8,8 +8,8 @@ import { usePulseRingAnimation } from '../../hooks/animations';
 import { commonMessages } from '../../locales/pt-BR/common';
 import { colors, spacing, animation } from '../../theme/tokens';
 import { useUserStore } from '../../store/userStore';
+import { VIEWFINDER_CAMERA_HEIGHT, VIEWFINDER_QR_HEIGHT, BRACKET_THICKNESS, BRACKET_COLOR } from '../../constants/scanner';
 import { useScanPlate } from './useScanPlate';
-import { DEMO_PLATES, VIEWFINDER_CAMERA_HEIGHT, VIEWFINDER_QR_HEIGHT, BRACKET_THICKNESS, BRACKET_COLOR } from './scanPlate.config';
 import { styles } from './styles';
 
 function Bracket({ position, color }: { position: 'tl' | 'tr' | 'bl' | 'br'; color: string }) {
@@ -95,6 +95,7 @@ export function ScanPlateScreen() {
     handleSimulatedScan,
     handleScanPlate,
     isValidating,
+    demoPlates,
     AlertComponent,
   } = useScanPlate();
 
@@ -110,7 +111,7 @@ export function ScanPlateScreen() {
         <View style={[styles.header, styles.headerCameraMode]}>
           <Text style={styles.headerLabel}>{commonMessages.access}</Text>
           <Text style={styles.headerGreeting}>
-            {commonMessages.greeting}, {firstName} {'👋'}
+            {commonMessages.greeting}, {firstName} {'\uD83D\uDC4B'}
           </Text>
         </View>
       ) : (
@@ -137,7 +138,7 @@ export function ScanPlateScreen() {
             </View>
           </View>
           <View style={styles.headerBellContainer}>
-            <Text style={styles.headerBellIcon}>{'🔔'}</Text>
+            <Text style={styles.headerBellIcon}>{'\uD83D\uDD14'}</Text>
           </View>
         </View>
       )}
@@ -151,13 +152,13 @@ export function ScanPlateScreen() {
           <View style={styles.toggleContainer}>
             <ToggleTab
               label={commonMessages.scan.cameraMode}
-              icon="📷"
+              icon={'\uD83D\uDCF7'}
               isActive={scanMode === 'CAMERA'}
               onPress={() => handleModeChange('CAMERA')}
             />
             <ToggleTab
               label={commonMessages.scan.qrCodeMode}
-              icon="📱"
+              icon={'\uD83D\uDCF1'}
               isActive={scanMode === 'QR_CODE'}
               onPress={() => handleModeChange('QR_CODE')}
             />
@@ -196,7 +197,7 @@ export function ScanPlateScreen() {
                 )
               ) : (
                 <View style={styles.qrIconContainer}>
-                  <Text style={styles.qrIconText}>{'📱'}</Text>
+                  <Text style={styles.qrIconText}>{'\uD83D\uDCF1'}</Text>
                 </View>
               )}
             </View>
@@ -210,16 +211,16 @@ export function ScanPlateScreen() {
               onPress={handleScanPlate}
               activeOpacity={0.7}
             >
-              <Text style={styles.scanPlateButtonIcon}>{'📱'}</Text>
+              <Text style={styles.scanPlateButtonIcon}>{'\uD83D\uDCF1'}</Text>
               <Text style={styles.scanPlateButtonText}>{commonMessages.scan.readQrCode}</Text>
             </TouchableOpacity>
 
             <View style={styles.utilityRow}>
               <View style={styles.utilityButton}>
-                <Text style={styles.utilityIcon}>{'🔦'}</Text>
+                <Text style={styles.utilityIcon}>{'\uD83D\uDD26'}</Text>
               </View>
               <View style={styles.utilityButton}>
-                <Text style={styles.utilityIcon}>{'🖼'}</Text>
+                <Text style={styles.utilityIcon}>{'\uD83D\uDDBC'}</Text>
               </View>
             </View>
           </>
@@ -232,7 +233,7 @@ export function ScanPlateScreen() {
               onPress={handleScanPlate}
               activeOpacity={0.7}
             >
-              <Text style={styles.scanPlateButtonIcon}>{'📷'}</Text>
+              <Text style={styles.scanPlateButtonIcon}>{'\uD83D\uDCF7'}</Text>
               <Text style={styles.scanPlateButtonText}>{commonMessages.scan.readPlate}</Text>
             </TouchableOpacity>
 
@@ -241,7 +242,7 @@ export function ScanPlateScreen() {
                 style={styles.manualButton}
                 onPress={() => setShowManualInput(true)}
               >
-                <Text style={styles.manualButtonIcon}>{'⌨️'}</Text>
+                <Text style={styles.manualButtonIcon}>{'\u2328\uFE0F'}</Text>
                 <Text style={styles.manualButtonText}>
                   {commonMessages.manualEntry}
                 </Text>
@@ -295,13 +296,13 @@ export function ScanPlateScreen() {
             </View>
             <View style={styles.recentCard}>
               <View style={styles.recentIconContainer}>
-                <Text style={styles.recentIcon}>{'✅'}</Text>
+                <Text style={styles.recentIcon}>{'\u2705'}</Text>
               </View>
               <View style={styles.recentInfo}>
                 <Text style={styles.recentPlate}>ABC-1234</Text>
                 <Text style={styles.recentMeta}>Entrada liberada - 19:20</Text>
               </View>
-              <Text style={styles.recentArrow}>{'›'}</Text>
+              <Text style={styles.recentArrow}>{'\u203A'}</Text>
             </View>
           </View>
         )}
@@ -309,7 +310,7 @@ export function ScanPlateScreen() {
         <View style={styles.simulateContainer}>
           <Text style={styles.simulateTitle}>{commonMessages.scan.simulateTitle}</Text>
           <View style={styles.simulateRow}>
-            {DEMO_PLATES.map((plate) => (
+            {demoPlates.map((plate) => (
               <TouchableOpacity
                 key={plate}
                 style={styles.simulateChip}

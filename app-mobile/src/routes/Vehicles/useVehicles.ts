@@ -4,7 +4,9 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useVehicles as useVehiclesQuery, useDeleteVehicle } from '../../service/vehicleAccess/useValidatePlate';
 import { RootStackParamList } from '../../types/navigation.types';
 import { commonMessages } from '../../locales/pt-BR/common';
-import { useCustomAlert } from '../../hooks/useCustomAlert';
+import { useErrorHandler } from '../../handlers/errorHandler';
+import { getStatusBadgeConfig } from '../../constants/vehicles';
+import type { StatusBadgeConfig } from '../../constants/vehicles';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 
@@ -12,35 +14,25 @@ export function useVehiclesList() {
   const navigation = useNavigation<Nav>();
   const vehiclesQuery = useVehiclesQuery();
   const deleteMutation = useDeleteVehicle();
-  const { alert, AlertComponent } = useCustomAlert();
+  const { handleDeleteConfirm, handleGenericError, AlertComponent } = useErrorHandler();
 
   const handleDelete = useCallback((plate: string) => {
-    alert(
-      commonMessages.alerts.removeVehicle,
-      commonMessages.vehicle.deleteConfirm,
-      [
-        { text: commonMessages.alerts.cancel, style: 'cancel' },
-        {
-          text: commonMessages.alerts.remove,
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              await deleteMutation.mutateAsync(plate);
-            } catch {
-              alert(commonMessages.alerts.errorTitle, commonMessages.alerts.deleteError, [
-                { text: commonMessages.alerts.ok },
-              ], '❌');
-            }
-          },
-        },
-      ],
-      '🗑️',
-    );
-  }, [deleteMutation, alert]);
+    handleDeleteConfirm(async () => {
+      try {
+        await deleteMutation.mutateAsync(plate);
+      } catch {
+        handleGenericError(commonMessages.alerts.errorTitle, commonMessages.alerts.deleteError);
+      }
+    });
+  }, [deleteMutation, handleDeleteConfirm, handleGenericError]);
 
   const handleAddVehicle = useCallback(() => {
     navigation.navigate('PlateCapture');
   }, [navigation]);
+
+  const getStatusBadge = useCallback((status: string): StatusBadgeConfig => {
+    return getStatusBadgeConfig(status);
+  }, []);
 
   return {
     vehicles: vehiclesQuery.data ?? [],
@@ -49,6 +41,7 @@ export function useVehiclesList() {
     refetch: vehiclesQuery.refetch,
     handleDelete,
     handleAddVehicle,
+    getStatusBadge,
     AlertComponent,
   };
 }

@@ -14,20 +14,19 @@ import { commonMessages } from '../../locales/pt-BR/common';
 import { colors } from '../../theme/tokens';
 import { VehicleItem } from '../../types/vehicleAccess.types';
 import { useVehiclesList } from './useVehicles';
-import { getStatusBadgeConfig } from './vehicles.config';
 import { styles } from './styles';
 
-function StatusBadge({ status }: { status: string }) {
-  const config = getStatusBadgeConfig(status);
+function StatusBadge({ status, getConfig }: { status: string; getConfig: (s: string) => { label: string; styleKey: 'statusAllowed' | 'statusDenied' | 'statusPending' } }) {
+  const config = getConfig(status);
   return <Text style={[styles.vehicleStatus, styles[config.styleKey]]}>{config.label}</Text>;
 }
 
 export function VehiclesScreen() {
-  const { vehicles, isLoading, isRefetching, refetch, handleDelete, handleAddVehicle, AlertComponent } = useVehiclesList();
+  const { vehicles, isLoading, isRefetching, refetch, handleDelete, handleAddVehicle, getStatusBadge, AlertComponent } = useVehiclesList();
 
   const renderDeleteAction = (plate: string) => (
     <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(plate)}>
-      <Text style={styles.deleteButtonText}>{'🗑'}</Text>
+      <Text style={styles.deleteButtonText}>{'\uD83D\uDDD1'}</Text>
     </TouchableOpacity>
   );
 
@@ -39,7 +38,7 @@ export function VehiclesScreen() {
           <Text style={styles.vehicleModel}>{item.vehicleModel ?? commonMessages.vehicle.noModel}</Text>
           <Text style={styles.vehicleOwner}>{item.ownerName}</Text>
         </View>
-        <StatusBadge status={item.status} />
+        <StatusBadge status={item.status} getConfig={getStatusBadge} />
       </View>
     </Swipeable>
   );
@@ -74,7 +73,7 @@ export function VehiclesScreen() {
         }
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyIcon}>{'🚗'}</Text>
+            <Text style={styles.emptyIcon}>{'\uD83D\uDE97'}</Text>
             <Text style={styles.emptyText}>{commonMessages.vehicle.noVehicles}</Text>
           </View>
         }

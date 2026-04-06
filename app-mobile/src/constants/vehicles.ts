@@ -1,6 +1,6 @@
-import { commonMessages } from '../../locales/pt-BR/common';
+import { commonMessages } from '../locales/pt-BR/common';
 
-// ─── Color name → hex mapping for vehicle colors ─────────────────
+// ─── Color name -> hex mapping for vehicle colors ─────────────────
 export const COLOR_MAP: Record<string, string> = {
   preta: '#1a1a1a',
   preto: '#1a1a1a',
@@ -35,6 +35,29 @@ export const VEHICLE_TYPES = [
   { key: 'motorcycle', icon: '\uD83C\uDFCD\uFE0F', label: commonMessages.vehicle.motorcycle },
   { key: 'truck', icon: '\uD83D\uDE90', label: commonMessages.vehicle.truck },
 ] as const;
+
+// ─── Status badge labels ─────────────────────────────────────────
+export type StatusBadgeStyleKey = 'statusAllowed' | 'statusDenied' | 'statusPending';
+
+export interface StatusBadgeConfig {
+  label: string;
+  styleKey: StatusBadgeStyleKey;
+}
+
+const STATUS_CONFIG: Record<string, StatusBadgeConfig> = {
+  ALLOWED: { label: commonMessages.status.allowed, styleKey: 'statusAllowed' },
+  DENIED:  { label: commonMessages.status.denied, styleKey: 'statusDenied' },
+  PENDING: { label: commonMessages.status.pending, styleKey: 'statusPending' },
+};
+
+const DEFAULT_STATUS_CONFIG: StatusBadgeConfig = {
+  label: commonMessages.status.pending,
+  styleKey: 'statusPending',
+};
+
+export function getStatusBadgeConfig(status: string): StatusBadgeConfig {
+  return STATUS_CONFIG[status] ?? DEFAULT_STATUS_CONFIG;
+}
 
 // ─── Resolve a color name (from DETRAN lookup) to hex ────────────
 export function resolveActiveColor(colorName: string): string | null {

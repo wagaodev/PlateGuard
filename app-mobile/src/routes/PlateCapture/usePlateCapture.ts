@@ -11,8 +11,7 @@ import MlkitOcr, { type MlkitOcrResult } from 'react-native-mlkit-ocr';
 import { RootStackParamList } from '../../types/navigation.types';
 import { useVehicleLookup } from '../../service/vehicleLookup/useVehicleLookup';
 import { isValidPlate, PLATE_REGEX } from '../../constants/plate';
-import { commonMessages } from '../../locales/pt-BR/common';
-import { useCustomAlert } from '../../hooks/useCustomAlert';
+import { useErrorHandler } from '../../handlers/errorHandler';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 
@@ -50,7 +49,7 @@ export function usePlateCapture() {
   const [plate, setPlate] = useState('');
   const [showManualInput, setShowManualInput] = useState(false);
   const [isProcessingOcr, setIsProcessingOcr] = useState(false);
-  const { alert, AlertComponent } = useCustomAlert();
+  const { handleNotFound, handlePlateNotDetected, handleInvalidPlate, AlertComponent } = useErrorHandler();
   const cameraRef = useRef<Camera>(null);
 
   const { hasPermission, requestPermission } = useCameraPermission();
@@ -75,42 +74,29 @@ export function usePlateCapture() {
 
       setIsProcessingOcr(true);
 
-      // Run ML Kit OCR on the captured photo
       const ocrResult = await MlkitOcr.detectFromUri(photoUri);
       const foundPlate = extractPlateFromOcrResult(ocrResult);
 
       setIsProcessingOcr(false);
 
       if (foundPlate) {
-        // OCR found a valid plate — auto-fill and auto-lookup
         setPlate(foundPlate);
         try {
           const lookupData = await lookupMutation.mutateAsync(foundPlate);
           navigation.navigate('VehicleRegistration', { lookupData });
         } catch {
-          alert(
-            commonMessages.camera.notFoundTitle,
-            commonMessages.camera.notFoundMessage,
-            [{ text: commonMessages.alerts.ok }],
-            '🔍',
-          );
+          handleNotFound();
           setShowManualInput(true);
         }
       } else {
-        // OCR couldn't find a plate — fallback to manual input
         setShowManualInput(true);
-        alert(
-          commonMessages.camera.plateNotDetected,
-          commonMessages.camera.plateNotDetectedMessage,
-          [{ text: commonMessages.alerts.ok }],
-          '📷',
-        );
+        handlePlateNotDetected();
       }
     } catch {
       setIsProcessingOcr(false);
       setShowManualInput(true);
     }
-  }, [lookupMutation, navigation, alert]);
+  }, [lookupMutation, navigation, handleNotFound, handlePlateNotDetected]);
 
   const handleToggleManualInput = useCallback(() => {
     setShowManualInput(true);
@@ -124,9 +110,7 @@ export function usePlateCapture() {
     const cleanPlate = plate.toUpperCase().replace(/[^A-Z0-9]/g, '');
 
     if (!isValidPlate(cleanPlate)) {
-      alert(commonMessages.camera.invalidPlateTitle, commonMessages.camera.invalidPlateMessage, [
-        { text: commonMessages.alerts.ok },
-      ], '⚠️');
+      handleInvalidPlate();
       return;
     }
 
@@ -134,14 +118,9 @@ export function usePlateCapture() {
       const lookupData = await lookupMutation.mutateAsync(cleanPlate);
       navigation.navigate('VehicleRegistration', { lookupData });
     } catch {
-      alert(
-        commonMessages.camera.notFoundTitle,
-        commonMessages.camera.notFoundMessage,
-        [{ text: commonMessages.alerts.ok }],
-        '🔍',
-      );
+      handleNotFound();
     }
-  }, [plate, lookupMutation, navigation, alert]);
+  }, [plate, lookupMutation, navigation, handleInvalidPlate, handleNotFound]);
 
   const handleGoBack = useCallback(() => {
     navigation.goBack();
