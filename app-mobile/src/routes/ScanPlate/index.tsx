@@ -7,6 +7,7 @@ import { ScanModeToggle } from '../../components/ScanModeToggle';
 import { CameraViewfinder } from '../../components/CameraViewfinder';
 import { BrazilianPlate } from '../../components/BrazilianPlate';
 import { usePulseAnimation } from '../../hooks/animations';
+import { LoadingOverlay } from '../../components/LoadingOverlay';
 import { vehicleAccessMessages } from '../../locales/pt-BR/vehicleAccess';
 import { colors } from '../../theme/tokens';
 import { commonMessages } from '../../locales/pt-BR/common';
@@ -104,6 +105,11 @@ export function ScanPlateScreen() {
           </View>
         </View>
       </ScrollView>
+      <LoadingOverlay
+        visible={isValidating}
+        message="Validando placa..."
+        subtitle="Consultando sistema de acesso"
+      />
     </SafeAreaView>
   );
 }

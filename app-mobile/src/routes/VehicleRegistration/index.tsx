@@ -4,6 +4,7 @@ import Animated from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BrazilianPlate } from '../../components/BrazilianPlate';
 import { useFadeInAnimation } from '../../hooks/animations';
+import { LoadingOverlay } from '../../components/LoadingOverlay';
 import { commonMessages } from '../../locales/pt-BR/common';
 import { colors } from '../../theme/tokens';
 import { useVehicleRegistration } from './useVehicleRegistration';
@@ -109,6 +110,11 @@ export function VehicleRegistrationScreen() {
         </TouchableOpacity>
       </ScrollView>
       {AlertComponent}
+      <LoadingOverlay
+        visible={isSubmitting}
+        message="Cadastrando veículo..."
+        subtitle="Registrando no sistema"
+      />
     </SafeAreaView>
   );
 }

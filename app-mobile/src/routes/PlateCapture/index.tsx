@@ -10,6 +10,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Camera } from 'react-native-vision-camera';
 import { BrazilianPlate } from '../../components/BrazilianPlate';
+import { LoadingOverlay } from '../../components/LoadingOverlay';
 import { commonMessages } from '../../locales/pt-BR/common';
 import { colors } from '../../theme/tokens';
 import { usePlateCapture } from './usePlateCapture';
@@ -145,6 +146,11 @@ export function PlateCaptureScreen() {
         )}
       </ScrollView>
       {AlertComponent}
+      <LoadingOverlay
+        visible={isLooking}
+        message="Consultando DETRAN..."
+        subtitle="Buscando dados do veículo"
+      />
     </SafeAreaView>
   );
 }
