@@ -104,6 +104,35 @@ describe('VehicleLookupService', () => {
       ).rejects.toThrow('Veículo com placa ZZZ9Z99 não encontrado no DETRAN');
     });
 
+    it('should return QTF6E90 data when plate exists in DETRAN lookup', async () => {
+      const qtfRecord = {
+        id: '99',
+        plate: 'QTF6E90',
+        brand: 'Volkswagen',
+        model: 'Passat Highline 2.0 TSI',
+        year: 2018,
+        color: 'Branco',
+        owner: 'Wagner Barboza Goulart',
+        fuelType: 'Gasolina',
+        city: 'Gravataí',
+        state: 'RS',
+        chassi: '9BWZZZ377VT004251',
+        renavam: '12345678901',
+        createdAt: new Date('2024-01-01'),
+        updatedAt: new Date('2024-01-01'),
+      };
+      repository.findByPlate.mockResolvedValue(qtfRecord);
+
+      const promise = service.lookupByPlate('QTF6E90');
+      jest.runAllTimers();
+      const result = await promise;
+
+      expect(result.plate).toBe('QTF6E90');
+      expect(result.brand).toBe('Volkswagen');
+      expect(result.model).toBe('Passat Highline 2.0 TSI');
+      expect(result.owner).toBe('Wagner Barboza Goulart');
+    });
+
     it('should include a simulated delay before querying the repository', async () => {
       repository.findByPlate.mockResolvedValue(mockVehicleLookupRecord);
 
