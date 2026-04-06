@@ -4,8 +4,7 @@ import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BrazilianPlate } from '../../components/BrazilianPlate';
 import { LoadingOverlay } from '../../components/LoadingOverlay';
-import { usePulseAnimation, useScanLineAnimation, usePulseRingAnimation } from '../../hooks/animations';
-import { vehicleAccessMessages } from '../../locales/pt-BR/vehicleAccess';
+import { usePulseRingAnimation } from '../../hooks/animations';
 import { commonMessages } from '../../locales/pt-BR/common';
 import { colors, spacing, animation } from '../../theme/tokens';
 import { useUserStore } from '../../store/userStore';
@@ -18,7 +17,6 @@ const VIEWFINDER_CAMERA_HEIGHT = 200;
 const VIEWFINDER_QR_HEIGHT = 240;
 const BRACKET_THICKNESS = 3;
 
-// ─── Bracket (L-shape corner) ────────────────────────────────────
 function Bracket({ position, color }: { position: 'tl' | 'tr' | 'bl' | 'br'; color: string }) {
   const isTop = position.includes('t');
   const isLeft = position.includes('l');
@@ -43,7 +41,6 @@ function Bracket({ position, color }: { position: 'tl' | 'tr' | 'bl' | 'br'; col
   );
 }
 
-// ─── PulseRing ───────────────────────────────────────────────────
 function PulseRing({ delay, height }: { delay: number; height: number }) {
   const ringStyle = usePulseRingAnimation(delay);
   return (
@@ -61,7 +58,6 @@ function PulseRing({ delay, height }: { delay: number; height: number }) {
   );
 }
 
-// ─── Toggle Tab Button ───────────────────────────────────────────
 function ToggleTab({
   label,
   icon,
@@ -92,7 +88,6 @@ function ToggleTab({
   );
 }
 
-// ─── Screen ──────────────────────────────────────────────────────
 export function ScanPlateScreen() {
   const {
     scanMode,
@@ -108,23 +103,13 @@ export function ScanPlateScreen() {
 
   const { name, avatarUri } = useUserStore();
   const firstName = name.split(' ')[0];
-
-  const pulseStyle = usePulseAnimation();
-  const scanLineStyle = useScanLineAnimation(
-    scanMode === 'QR_CODE' ? VIEWFINDER_QR_HEIGHT : VIEWFINDER_CAMERA_HEIGHT,
-  );
   const [inputFocused, setInputFocused] = useState(false);
 
   const isCamera = scanMode === 'CAMERA';
-  const statusText = isCamera
-    ? vehicleAccessMessages.scanStatus.camera
-    : vehicleAccessMessages.scanStatus.qrCode;
-
   const bracketColor = '#FF6B35';
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      {/* ─── Header ─────────────────────────────────────────────── */}
       {isCamera ? (
         <View style={[styles.header, styles.headerCameraMode]}>
           <Text style={styles.headerLabel}>ACESSO</Text>
@@ -166,7 +151,6 @@ export function ScanPlateScreen() {
         contentContainerStyle={{ gap: spacing.sm, paddingBottom: spacing.xxl }}
         showsVerticalScrollIndicator={false}
       >
-        {/* ─── Toggle ───────────────────────────────────────────── */}
         <View style={styles.toggleWrapper}>
           <View style={styles.toggleContainer}>
             <ToggleTab
@@ -184,7 +168,6 @@ export function ScanPlateScreen() {
           </View>
         </View>
 
-        {/* ─── Viewfinder ───────────────────────────────────────── */}
         <View style={styles.viewfinderOuter}>
           <View style={styles.pulseRingContainer}>
             <PulseRing
@@ -208,16 +191,12 @@ export function ScanPlateScreen() {
             <Bracket position="bl" color={bracketColor} />
             <Bracket position="br" color={bracketColor} />
 
-            {isCamera && (
-              <Animated.View style={[styles.scanLine, scanLineStyle]} />
-            )}
-
             <View style={styles.viewfinderContent}>
               {isCamera ? (
                 manualPlate.replace(/\s/g, '').length >= 3 ? (
                   <BrazilianPlate plate={manualPlate.replace(/\s/g, '')} size="md" />
                 ) : (
-                  <BrazilianPlate plate="BRA2E19" size="md" />
+                  <BrazilianPlate plate="BRA2O26" size="md" />
                 )
               ) : (
                 <View style={styles.qrIconContainer}>
@@ -228,13 +207,6 @@ export function ScanPlateScreen() {
           </View>
         </View>
 
-        {/* ─── Status ───────────────────────────────────────────── */}
-        <View style={styles.statusContainer}>
-          <Animated.View style={[styles.statusDot, pulseStyle]} />
-          <Text style={styles.statusText}>{statusText}</Text>
-        </View>
-
-        {/* ─── Utility Icons (QR mode) ──────────────────────────── */}
         {!isCamera && (
           <View style={styles.utilityRow}>
             <View style={styles.utilityButton}>
@@ -246,7 +218,6 @@ export function ScanPlateScreen() {
           </View>
         )}
 
-        {/* ─── Manual Input / Button (Camera mode) ──────────────── */}
         {isCamera && (
           <>
             {!showManualInput ? (
@@ -272,9 +243,15 @@ export function ScanPlateScreen() {
                   placeholderTextColor={colors.textMuted}
                   maxLength={7}
                   autoCapitalize="characters"
+                  autoFocus={true}
                   onFocus={() => setInputFocused(true)}
                   onBlur={() => setInputFocused(false)}
                 />
+                {manualPlate.replace(/\s/g, '').length >= 3 && (
+                  <View style={styles.manualPlatePreview}>
+                    <BrazilianPlate plate={manualPlate.replace(/\s/g, '')} size="sm" />
+                  </View>
+                )}
                 <TouchableOpacity
                   style={[
                     styles.submitButton,
@@ -292,11 +269,10 @@ export function ScanPlateScreen() {
           </>
         )}
 
-        {/* ─── Recent Access (Camera mode) ──────────────────────── */}
         {isCamera && (
           <View style={styles.recentSection}>
             <View style={styles.recentHeader}>
-              <Text style={styles.recentTitle}>Ultimos Acessos</Text>
+              <Text style={styles.recentTitle}>Últimos Acessos</Text>
               <TouchableOpacity>
                 <Text style={styles.recentViewAll}>VER TUDO</Text>
               </TouchableOpacity>
@@ -314,7 +290,6 @@ export function ScanPlateScreen() {
           </View>
         )}
 
-        {/* ─── Simulate POC ─────────────────────────────────────── */}
         <View style={styles.simulateContainer}>
           <Text style={styles.simulateTitle}>Simular leitura (POC)</Text>
           <View style={styles.simulateRow}>

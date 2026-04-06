@@ -289,6 +289,10 @@ export const styles = StyleSheet.create({
     borderBottomColor: '#FF6B35',
     backgroundColor: 'rgba(255, 107, 53, 0.06)',
   },
+  manualPlatePreview: {
+    alignItems: 'center',
+    paddingVertical: spacing.xs,
+  },
   submitButton: {
     backgroundColor: '#FF6B35',
     borderRadius: radii.lg,
