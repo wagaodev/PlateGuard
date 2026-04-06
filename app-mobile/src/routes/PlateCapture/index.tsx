@@ -7,6 +7,7 @@ import {
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Camera } from 'react-native-vision-camera';
 import { BrazilianPlate } from '../../components/BrazilianPlate';
 import { commonMessages } from '../../locales/pt-BR/common';
@@ -36,7 +37,7 @@ export function PlateCaptureScreen() {
   const isValidLength = cleanPlate.length === 7;
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top']}>
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
           <Text style={styles.backText}>{'←'}</Text>
@@ -144,6 +145,6 @@ export function PlateCaptureScreen() {
         )}
       </ScrollView>
       {AlertComponent}
-    </View>
+    </SafeAreaView>
   );
 }
