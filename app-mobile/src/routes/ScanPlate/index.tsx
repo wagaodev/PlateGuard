@@ -98,6 +98,7 @@ export function ScanPlateScreen() {
     setShowManualInput,
     handleManualSubmit,
     handleSimulatedScan,
+    handleScanPlate,
     isValidating,
   } = useScanPlate();
 
@@ -220,6 +221,15 @@ export function ScanPlateScreen() {
 
         {isCamera && (
           <>
+            <TouchableOpacity
+              style={styles.scanPlateButton}
+              onPress={handleScanPlate}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.scanPlateButtonIcon}>{'📷'}</Text>
+              <Text style={styles.scanPlateButtonText}>Ler Placa</Text>
+            </TouchableOpacity>
+
             {!showManualInput ? (
               <TouchableOpacity
                 style={styles.manualButton}

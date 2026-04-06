@@ -241,6 +241,34 @@ export const styles = StyleSheet.create({
     fontSize: 18,
   },
 
+  // ─── Scan Plate Button (CTA) ────────────────────────────────────
+  scanPlateButton: {
+    alignSelf: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: spacing.sm,
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.xl,
+    borderRadius: radii.full,
+    backgroundColor: '#FF6B35',
+    marginTop: spacing.md,
+    shadowColor: '#FF6B35',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.35,
+    shadowRadius: 12,
+    elevation: 8,
+  },
+  scanPlateButtonIcon: {
+    fontSize: 18,
+  },
+  scanPlateButtonText: {
+    fontFamily: typography.fontBody,
+    fontSize: typography.sizeTitleMd,
+    fontWeight: typography.weightSemiBold,
+    color: colors.onSurface,
+  },
+
   // ─── Manual Button ─────────────────────────────────────────────
   manualButton: {
     alignSelf: 'center',

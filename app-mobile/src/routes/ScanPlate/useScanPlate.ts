@@ -40,6 +40,10 @@ export function useScanPlate() {
     handleValidate(plate, scanMode === 'QR_CODE' ? 'QR_CODE' : 'CAMERA');
   }, [handleValidate, scanMode]);
 
+  const handleScanPlate = useCallback(() => {
+    navigation.navigate('PlateCapture');
+  }, [navigation]);
+
   return {
     scanMode,
     handleModeChange,
@@ -49,6 +53,7 @@ export function useScanPlate() {
     setShowManualInput,
     handleManualSubmit,
     handleSimulatedScan,
+    handleScanPlate,
     isValidating: validateMutation.isPending,
   };
 }
