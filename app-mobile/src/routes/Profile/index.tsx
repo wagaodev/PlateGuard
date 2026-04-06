@@ -4,14 +4,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { commonMessages } from '../../locales/pt-BR/common';
 import { useVehicles } from '../../service/vehicleAccess/useValidatePlate';
 import { colors } from '../../theme/tokens';
+import { VehicleItem } from '../../types/vehicleAccess.types';
 import { useProfile } from './useProfile';
 import { styles } from './styles';
-
-interface VehicleItem {
-  plate: string;
-  vehicleModel: string | null;
-  vehicleColor: string | null;
-}
 
 export function ProfileScreen() {
   const { name, role, unit, avatarUri, handlePickAvatar, handleAddVehicle } = useProfile();
@@ -50,7 +45,7 @@ export function ProfileScreen() {
           <View style={styles.infoRow}>
             <Text style={styles.infoIcon}>{'📧'}</Text>
             <View style={styles.infoLabelColumn}>
-              <Text style={styles.infoLabel}>Email</Text>
+              <Text style={styles.infoLabel}>{commonMessages.profile.email}</Text>
               <Text style={styles.infoValue}>wagner.b@valeti.com.br</Text>
             </View>
           </View>
@@ -59,7 +54,7 @@ export function ProfileScreen() {
           <View style={styles.infoRow}>
             <Text style={styles.infoIcon}>{'📱'}</Text>
             <View style={styles.infoLabelColumn}>
-              <Text style={styles.infoLabel}>Telefone</Text>
+              <Text style={styles.infoLabel}>{commonMessages.profile.phone}</Text>
               <Text style={styles.infoValue}>(11) 98765-4321</Text>
             </View>
           </View>
@@ -68,7 +63,7 @@ export function ProfileScreen() {
           <View style={styles.infoRow}>
             <Text style={styles.infoIcon}>{'🏠'}</Text>
             <View style={styles.infoLabelColumn}>
-              <Text style={styles.infoLabel}>Unidade</Text>
+              <Text style={styles.infoLabel}>{commonMessages.profile.unit}</Text>
               <Text style={styles.infoValue}>{unit}</Text>
             </View>
           </View>
@@ -93,7 +88,7 @@ export function ProfileScreen() {
                     </View>
                   </View>
                   <Text style={styles.vehicleModel}>
-                    {v.vehicleModel ?? 'Sem modelo'}
+                    {v.vehicleModel ?? commonMessages.vehicle.noModel}
                   </Text>
                   {v.vehicleColor ? (
                     <Text style={styles.vehicleDetail}>

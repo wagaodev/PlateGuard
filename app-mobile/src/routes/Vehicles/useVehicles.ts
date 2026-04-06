@@ -16,19 +16,19 @@ export function useVehiclesList() {
 
   const handleDelete = useCallback((plate: string) => {
     alert(
-      'Remover veículo',
+      commonMessages.alerts.removeVehicle,
       commonMessages.vehicle.deleteConfirm,
       [
-        { text: 'Cancelar', style: 'cancel' },
+        { text: commonMessages.alerts.cancel, style: 'cancel' },
         {
-          text: 'Remover',
+          text: commonMessages.alerts.remove,
           style: 'destructive',
           onPress: async () => {
             try {
               await deleteMutation.mutateAsync(plate);
             } catch {
-              alert('Erro', 'Não foi possível remover o veículo', [
-                { text: 'OK' },
+              alert(commonMessages.alerts.errorTitle, commonMessages.alerts.deleteError, [
+                { text: commonMessages.alerts.ok },
               ], '❌');
             }
           },

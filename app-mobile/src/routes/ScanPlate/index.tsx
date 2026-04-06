@@ -9,13 +9,8 @@ import { commonMessages } from '../../locales/pt-BR/common';
 import { colors, spacing, animation } from '../../theme/tokens';
 import { useUserStore } from '../../store/userStore';
 import { useScanPlate } from './useScanPlate';
+import { DEMO_PLATES, VIEWFINDER_CAMERA_HEIGHT, VIEWFINDER_QR_HEIGHT, BRACKET_THICKNESS, BRACKET_COLOR } from './scanPlate.config';
 import { styles } from './styles';
-
-const DEMO_PLATES = ['BRA2O26', 'ABC3D45', 'XYZ1234', 'BLQ9A87', 'QTF6E90'];
-
-const VIEWFINDER_CAMERA_HEIGHT = 200;
-const VIEWFINDER_QR_HEIGHT = 240;
-const BRACKET_THICKNESS = 3;
 
 function Bracket({ position, color }: { position: 'tl' | 'tr' | 'bl' | 'br'; color: string }) {
   const isTop = position.includes('t');
@@ -50,7 +45,7 @@ function PulseRing({ delay, height }: { delay: number; height: number }) {
         {
           width: '108%',
           height: height * 1.08,
-          borderColor: '#FF6B35',
+          borderColor: BRACKET_COLOR,
         },
         ringStyle,
       ]}
@@ -71,7 +66,7 @@ function ToggleTab({
 }) {
   const bgStyle = useAnimatedStyle(() => ({
     backgroundColor: withTiming(
-      isActive ? '#FF6B35' : 'transparent',
+      isActive ? BRACKET_COLOR : 'transparent',
       { duration: animation.durationNormal },
     ),
   }));
@@ -107,13 +102,12 @@ export function ScanPlateScreen() {
   const [inputFocused, setInputFocused] = useState(false);
 
   const isCamera = scanMode === 'CAMERA';
-  const bracketColor = '#FF6B35';
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       {isCamera ? (
         <View style={[styles.header, styles.headerCameraMode]}>
-          <Text style={styles.headerLabel}>ACESSO</Text>
+          <Text style={styles.headerLabel}>{commonMessages.access}</Text>
           <Text style={styles.headerGreeting}>
             {commonMessages.greeting}, {firstName} {'👋'}
           </Text>
@@ -138,7 +132,7 @@ export function ScanPlateScreen() {
             </View>
             <View style={styles.headerQrTextContainer}>
               <Text style={styles.headerQrTitle}>{commonMessages.location}</Text>
-              <Text style={styles.headerQrSubtitle}>SENTINEL ACCESS</Text>
+              <Text style={styles.headerQrSubtitle}>{commonMessages.sentinelAccess}</Text>
             </View>
           </View>
           <View style={styles.headerBellContainer}>
@@ -155,13 +149,13 @@ export function ScanPlateScreen() {
         <View style={styles.toggleWrapper}>
           <View style={styles.toggleContainer}>
             <ToggleTab
-              label="Câmera"
+              label={commonMessages.scan.cameraMode}
               icon="📷"
               isActive={scanMode === 'CAMERA'}
               onPress={() => handleModeChange('CAMERA')}
             />
             <ToggleTab
-              label="QR Code"
+              label={commonMessages.scan.qrCodeMode}
               icon="📱"
               isActive={scanMode === 'QR_CODE'}
               onPress={() => handleModeChange('QR_CODE')}
@@ -187,15 +181,15 @@ export function ScanPlateScreen() {
               isCamera ? styles.viewfinderCamera : styles.viewfinderQr,
             ]}
           >
-            <Bracket position="tl" color={bracketColor} />
-            <Bracket position="tr" color={bracketColor} />
-            <Bracket position="bl" color={bracketColor} />
-            <Bracket position="br" color={bracketColor} />
+            <Bracket position="tl" color={BRACKET_COLOR} />
+            <Bracket position="tr" color={BRACKET_COLOR} />
+            <Bracket position="bl" color={BRACKET_COLOR} />
+            <Bracket position="br" color={BRACKET_COLOR} />
 
             <View style={styles.viewfinderContent}>
               {isCamera ? (
-                manualPlate.replace(/\s/g, '').length >= 3 ? (
-                  <BrazilianPlate plate={manualPlate.replace(/\s/g, '')} size="md" />
+                manualPlate.length >= 3 ? (
+                  <BrazilianPlate plate={manualPlate} size="md" />
                 ) : (
                   <BrazilianPlate plate="BRA2O26" size="md" />
                 )
@@ -216,7 +210,7 @@ export function ScanPlateScreen() {
               activeOpacity={0.7}
             >
               <Text style={styles.scanPlateButtonIcon}>{'📱'}</Text>
-              <Text style={styles.scanPlateButtonText}>Ler QR Code</Text>
+              <Text style={styles.scanPlateButtonText}>{commonMessages.scan.readQrCode}</Text>
             </TouchableOpacity>
 
             <View style={styles.utilityRow}>
@@ -238,7 +232,7 @@ export function ScanPlateScreen() {
               activeOpacity={0.7}
             >
               <Text style={styles.scanPlateButtonIcon}>{'📷'}</Text>
-              <Text style={styles.scanPlateButtonText}>Ler Placa</Text>
+              <Text style={styles.scanPlateButtonText}>{commonMessages.scan.readPlate}</Text>
             </TouchableOpacity>
 
             {!showManualInput ? (
@@ -268,9 +262,9 @@ export function ScanPlateScreen() {
                   onFocus={() => setInputFocused(true)}
                   onBlur={() => setInputFocused(false)}
                 />
-                {manualPlate.replace(/\s/g, '').length >= 3 && (
+                {manualPlate.length >= 3 && (
                   <View style={styles.manualPlatePreview}>
-                    <BrazilianPlate plate={manualPlate.replace(/\s/g, '')} size="sm" />
+                    <BrazilianPlate plate={manualPlate} size="sm" />
                   </View>
                 )}
                 <TouchableOpacity
@@ -279,10 +273,10 @@ export function ScanPlateScreen() {
                     { opacity: manualPlate.length < 7 ? 0.5 : 1 },
                   ]}
                   onPress={handleManualSubmit}
-                  disabled={manualPlate.replace(/\s/g, '').length < 7 || isValidating}
+                  disabled={manualPlate.length < 7 || isValidating}
                 >
                   <Text style={styles.submitButtonText}>
-                    {isValidating ? 'Validando...' : 'Validar Placa'}
+                    {isValidating ? commonMessages.scan.validating : commonMessages.scan.validatePlate}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -293,9 +287,9 @@ export function ScanPlateScreen() {
         {isCamera && (
           <View style={styles.recentSection}>
             <View style={styles.recentHeader}>
-              <Text style={styles.recentTitle}>Últimos Acessos</Text>
+              <Text style={styles.recentTitle}>{commonMessages.scan.recentAccess}</Text>
               <TouchableOpacity>
-                <Text style={styles.recentViewAll}>VER TUDO</Text>
+                <Text style={styles.recentViewAll}>{commonMessages.scan.viewAll}</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.recentCard}>
@@ -312,7 +306,7 @@ export function ScanPlateScreen() {
         )}
 
         <View style={styles.simulateContainer}>
-          <Text style={styles.simulateTitle}>Simular leitura (POC)</Text>
+          <Text style={styles.simulateTitle}>{commonMessages.scan.simulateTitle}</Text>
           <View style={styles.simulateRow}>
             {DEMO_PLATES.map((plate) => (
               <TouchableOpacity
@@ -330,8 +324,8 @@ export function ScanPlateScreen() {
 
       <LoadingOverlay
         visible={isValidating}
-        message="Validando placa..."
-        subtitle="Consultando sistema de acesso"
+        message={commonMessages.scan.validatingPlate}
+        subtitle={commonMessages.scan.validatingSubtitle}
       />
     </SafeAreaView>
   );

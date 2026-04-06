@@ -20,3 +20,14 @@ export interface VehicleAccessResponse {
   vehicleModel?: string;
   accessType?:   string;
 }
+
+export type VehicleStatus = 'ALLOWED' | 'DENIED' | 'PENDING';
+
+export interface VehicleItem {
+  id: string;
+  plate: string;
+  ownerName: string;
+  vehicleModel: string | null;
+  vehicleColor: string | null;
+  status: string;
+}

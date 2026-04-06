@@ -12,28 +12,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { BrazilianPlate } from '../../components/BrazilianPlate';
 import { commonMessages } from '../../locales/pt-BR/common';
 import { colors } from '../../theme/tokens';
+import { VehicleItem } from '../../types/vehicleAccess.types';
 import { useVehiclesList } from './useVehicles';
+import { getStatusBadgeConfig } from './vehicles.config';
 import { styles } from './styles';
 
-interface VehicleItem {
-  id: string;
-  plate: string;
-  ownerName: string;
-  vehicleModel: string | null;
-  vehicleColor: string | null;
-  status: string;
-}
-
 function StatusBadge({ status }: { status: string }) {
-  const statusStyle = status === 'ALLOWED'
-    ? styles.statusAllowed
-    : status === 'DENIED'
-      ? styles.statusDenied
-      : styles.statusPending;
-
-  const label = status === 'ALLOWED' ? 'Ativo' : status === 'DENIED' ? 'Bloqueado' : 'Pendente';
-
-  return <Text style={[styles.vehicleStatus, statusStyle]}>{label}</Text>;
+  const config = getStatusBadgeConfig(status);
+  return <Text style={[styles.vehicleStatus, styles[config.styleKey]]}>{config.label}</Text>;
 }
 
 export function VehiclesScreen() {
@@ -50,7 +36,7 @@ export function VehiclesScreen() {
       <View style={styles.vehicleCard}>
         <BrazilianPlate plate={item.plate} size="sm" />
         <View style={styles.vehicleInfo}>
-          <Text style={styles.vehicleModel}>{item.vehicleModel ?? 'Sem modelo'}</Text>
+          <Text style={styles.vehicleModel}>{item.vehicleModel ?? commonMessages.vehicle.noModel}</Text>
           <Text style={styles.vehicleOwner}>{item.ownerName}</Text>
         </View>
         <StatusBadge status={item.status} />

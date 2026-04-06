@@ -8,52 +8,8 @@ import { LoadingOverlay } from '../../components/LoadingOverlay';
 import { commonMessages } from '../../locales/pt-BR/common';
 import { colors } from '../../theme/tokens';
 import { useVehicleRegistration } from './useVehicleRegistration';
+import { VEHICLE_COLOR_DOTS, VEHICLE_TYPES, resolveActiveColor, resolveVehicleType } from './vehicleRegistration.config';
 import { styles } from './styles';
-
-const COLOR_MAP: Record<string, string> = {
-  preta: '#1a1a1a',
-  preto: '#1a1a1a',
-  prato: '#1a1a1a',
-  cinza: '#5a5a5a',
-  vermelha: '#c0392b',
-  vermelho: '#c0392b',
-  azul: '#2980b9',
-  marrom: '#8b4513',
-  verde: '#27ae60',
-  branca: '#f0f0f0',
-  branco: '#f0f0f0',
-  prata: '#c0c0c0',
-  amarela: '#f1c40f',
-  amarelo: '#f1c40f',
-  bege: '#d4a574',
-};
-
-const VEHICLE_COLOR_DOTS = [
-  { name: 'preta', hex: '#1a1a1a' },
-  { name: 'cinza', hex: '#5a5a5a' },
-  { name: 'vermelha', hex: '#c0392b' },
-  { name: 'azul', hex: '#2980b9' },
-  { name: 'marrom', hex: '#8b4513' },
-  { name: 'verde', hex: '#27ae60' },
-];
-
-const VEHICLE_TYPES = [
-  { key: 'car', icon: '\uD83D\uDE97', label: commonMessages.vehicle.car },
-  { key: 'motorcycle', icon: '\uD83C\uDFCD\uFE0F', label: commonMessages.vehicle.motorcycle },
-  { key: 'truck', icon: '\uD83D\uDE90', label: commonMessages.vehicle.truck },
-] as const;
-
-function resolveActiveColor(colorName: string): string | null {
-  const normalized = colorName.toLowerCase().trim();
-  for (const [key, hex] of Object.entries(COLOR_MAP)) {
-    if (normalized.includes(key)) return hex;
-  }
-  return null;
-}
-
-function resolveVehicleType(_model: string): string {
-  return 'car';
-}
 
 export function VehicleRegistrationScreen() {
   const {
@@ -93,9 +49,9 @@ export function VehicleRegistrationScreen() {
           <Text style={styles.backText}>{'\u2190'}</Text>
         </TouchableOpacity>
         <View style={styles.headerTitleContainer}>
-          <Text style={styles.headerTitle}>Adicionar Ve{'\u00ED'}culo</Text>
+          <Text style={styles.headerTitle}>{commonMessages.vehicle.addTitle}</Text>
         </View>
-        <Text style={styles.stepIndicator}>1 de 2</Text>
+        <Text style={styles.stepIndicator}>{commonMessages.vehicle.stepIndicator}</Text>
       </View>
 
       <ScrollView
@@ -105,7 +61,7 @@ export function VehicleRegistrationScreen() {
       >
         {/* ─── Plate Section ──────────────────────────────────── */}
         <Animated.View style={[styles.plateSection, fadeSection0]}>
-          <Text style={styles.sectionLabel}>Placa do ve{'\u00ED'}culo</Text>
+          <Text style={styles.sectionLabel}>{commonMessages.vehicle.plateLabel}</Text>
           <View style={styles.plateInputRow}>
             <Text style={styles.plateTextLarge}>{lookupData.plate}</Text>
             <View style={styles.cameraIconButton}>
@@ -122,13 +78,13 @@ export function VehicleRegistrationScreen() {
 
         {/* ─── Model Section ──────────────────────────────────── */}
         <Animated.View style={[styles.modelSection, fadeSection1]}>
-          <Text style={styles.sectionLabel}>Modelo</Text>
+          <Text style={styles.sectionLabel}>{commonMessages.vehicle.model}</Text>
           <Text style={styles.modelText}>{modelDisplay}</Text>
         </Animated.View>
 
         {/* ─── Color Section ──────────────────────────────────── */}
         <Animated.View style={[styles.colorSection, fadeSection2]}>
-          <Text style={styles.sectionLabel}>Cor</Text>
+          <Text style={styles.sectionLabel}>{commonMessages.vehicle.color}</Text>
           <View style={styles.colorDotsRow}>
             {VEHICLE_COLOR_DOTS.map((c) => {
               const isActive = activeColorHex === c.hex;
@@ -151,7 +107,7 @@ export function VehicleRegistrationScreen() {
 
         {/* ─── Vehicle Type Section ───────────────────────────── */}
         <Animated.View style={[styles.typeSection, fadeSection3]}>
-          <Text style={styles.sectionLabel}>Tipo de ve{'\u00ED'}culo</Text>
+          <Text style={styles.sectionLabel}>{commonMessages.vehicle.vehicleType}</Text>
           <View style={styles.segmentedControl}>
             {VEHICLE_TYPES.map((t) => {
               const isActive = t.key === activeType;
@@ -190,7 +146,7 @@ export function VehicleRegistrationScreen() {
             </View>
             <View style={styles.qrTextContainer}>
               <Text style={styles.qrTitle}>{commonMessages.vehicle.generateQr}</Text>
-              <Text style={styles.qrSubtitle}>Acesso r{'\u00E1'}pido via scanner</Text>
+              <Text style={styles.qrSubtitle}>{commonMessages.vehicle.qrQuickAccess}</Text>
             </View>
             <View
               style={[
@@ -219,7 +175,7 @@ export function VehicleRegistrationScreen() {
             {isSubmitting ? (
               <View style={styles.loadingRow}>
                 <ActivityIndicator size="small" color={colors.surface} />
-                <Text style={styles.submitButtonText}>Cadastrando...</Text>
+                <Text style={styles.submitButtonText}>{commonMessages.scan.registering}</Text>
               </View>
             ) : (
               <Text style={styles.submitButtonText}>
@@ -233,8 +189,8 @@ export function VehicleRegistrationScreen() {
       {AlertComponent}
       <LoadingOverlay
         visible={isSubmitting}
-        message="Cadastrando ve\u00EDculo..."
-        subtitle="Registrando no sistema"
+        message={commonMessages.scan.registeringVehicle}
+        subtitle={commonMessages.scan.registeringSubtitle}
       />
     </SafeAreaView>
   );

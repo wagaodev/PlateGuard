@@ -4,6 +4,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../types/navigation.types';
 import { useCreateVehicle } from '../../service/vehicleAccess/useValidatePlate';
+import { commonMessages } from '../../locales/pt-BR/common';
 import { useCustomAlert } from '../../hooks/useCustomAlert';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
@@ -36,12 +37,12 @@ export function useVehicleRegistration() {
         vehicleColor: lookupData.color,
         generateQrCode: generateQr,
       });
-      alert('Veículo cadastrado', 'Seu veículo foi adicionado com sucesso.', [
-        { text: 'Ver meus veículos', onPress: navigateToVehicles },
+      alert(commonMessages.alerts.vehicleRegistered, commonMessages.alerts.vehicleRegisteredMessage, [
+        { text: commonMessages.alerts.viewMyVehicles, onPress: navigateToVehicles },
       ], '✅');
     } catch {
-      alert('Erro', 'Não foi possível cadastrar o veículo. Tente novamente.', [
-        { text: 'OK' },
+      alert(commonMessages.alerts.errorTitle, commonMessages.alerts.registrationError, [
+        { text: commonMessages.alerts.ok },
       ], '❌');
     }
   }, [lookupData, generateQr, createMutation, navigateToVehicles, alert]);

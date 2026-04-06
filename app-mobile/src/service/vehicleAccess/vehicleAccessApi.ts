@@ -1,19 +1,13 @@
 import axios from 'axios';
-import { API_BASE_URL } from '../../constants/api';
+import { apiClient } from '../apiClient';
 import { VehicleAccessResponse } from '../../types/vehicleAccess.types';
-
-const api = axios.create({
-  baseURL: API_BASE_URL,
-  timeout: 10000,
-  headers: { 'Content-Type': 'application/json' },
-});
 
 export async function validatePlate(
   plate: string,
   entryMethod = 'CAMERA',
 ): Promise<VehicleAccessResponse> {
   try {
-    const { data } = await api.post<VehicleAccessResponse>(
+    const { data } = await apiClient.post<VehicleAccessResponse>(
       '/vehicle-access/validate',
       { plate: plate.toUpperCase().replace(/\s/g, ''), entryMethod },
     );
@@ -35,7 +29,7 @@ export async function validateQrCode(
   token: string,
 ): Promise<VehicleAccessResponse> {
   try {
-    const { data } = await api.post<VehicleAccessResponse>(
+    const { data } = await apiClient.post<VehicleAccessResponse>(
       '/vehicle-access/validate-qr',
       { token, entryMethod: 'QR_CODE' },
     );
@@ -64,7 +58,7 @@ export interface CreateVehiclePayload {
 }
 
 export async function createVehicle(payload: CreateVehiclePayload) {
-  const { data } = await api.post('/vehicles', {
+  const { data } = await apiClient.post('/vehicles', {
     ...payload,
     plate: payload.plate.toUpperCase().replace(/\s/g, ''),
   });
@@ -72,10 +66,10 @@ export async function createVehicle(payload: CreateVehiclePayload) {
 }
 
 export async function fetchVehicles() {
-  const { data } = await api.get('/vehicles');
+  const { data } = await apiClient.get('/vehicles');
   return data;
 }
 
 export async function deleteVehicle(plate: string) {
-  await api.delete(`/vehicles/${plate.toUpperCase().replace(/\s/g, '')}`);
+  await apiClient.delete(`/vehicles/${plate.toUpperCase().replace(/\s/g, '')}`);
 }
