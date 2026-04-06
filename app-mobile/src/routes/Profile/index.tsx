@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Image, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { BrazilianPlate } from '../../components/BrazilianPlate';
 import { commonMessages } from '../../locales/pt-BR/common';
 import { useVehicles } from '../../service/vehicleAccess/useValidatePlate';
 import { colors } from '../../theme/tokens';
@@ -11,6 +10,7 @@ import { styles } from './styles';
 interface VehicleItem {
   plate: string;
   vehicleModel: string | null;
+  vehicleColor: string | null;
 }
 
 export function ProfileScreen() {
@@ -21,10 +21,11 @@ export function ProfileScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        {/* ─── Hero ──────────────────────────────────────── */}
         <View style={styles.heroSection}>
           <View style={styles.avatarContainer}>
-            <View style={styles.avatarWrapper}>
+            <View style={styles.avatarOuter}>
               {avatarUri ? (
                 <Image source={{ uri: avatarUri }} style={styles.avatar} />
               ) : (
@@ -38,83 +39,113 @@ export function ProfileScreen() {
             </TouchableOpacity>
           </View>
           <Text style={styles.heroName}>{name}</Text>
-          <Text style={styles.heroSubtitle}>{role} · {unit}</Text>
+          <Text style={styles.heroSubtitle}>{role} {'\u2022'} {unit}</Text>
           <View style={styles.activeBadge}>
             <Text style={styles.activeBadgeText}>{commonMessages.profile.active}</Text>
           </View>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionLabel}>{commonMessages.profile.personalInfo}</Text>
-          <View style={styles.card}>
-            <View style={styles.row}>
-              <Text style={styles.rowIcon}>{'👤'}</Text>
-              <Text style={styles.rowLabel}>Nome</Text>
-              <Text style={styles.rowValue}>{name}</Text>
+        {/* ─── Info Rows ─────────────────────────────────── */}
+        <View style={styles.infoSection}>
+          <View style={styles.infoRow}>
+            <Text style={styles.infoIcon}>{'📧'}</Text>
+            <View style={styles.infoLabelColumn}>
+              <Text style={styles.infoLabel}>Email</Text>
+              <Text style={styles.infoValue}>wagner.b@valeti.com.br</Text>
             </View>
-            <View style={styles.row}>
-              <Text style={styles.rowIcon}>{'🏠'}</Text>
-              <Text style={styles.rowLabel}>Unidade</Text>
-              <Text style={styles.rowValue}>{unit}</Text>
+          </View>
+          <View style={styles.infoDivider} />
+
+          <View style={styles.infoRow}>
+            <Text style={styles.infoIcon}>{'📱'}</Text>
+            <View style={styles.infoLabelColumn}>
+              <Text style={styles.infoLabel}>Telefone</Text>
+              <Text style={styles.infoValue}>(11) 98765-4321</Text>
             </View>
-            <View style={styles.row}>
-              <Text style={styles.rowIcon}>{'🔑'}</Text>
-              <Text style={styles.rowLabel}>Função</Text>
-              <Text style={styles.rowValue}>{role}</Text>
+          </View>
+          <View style={styles.infoDivider} />
+
+          <View style={styles.infoRow}>
+            <Text style={styles.infoIcon}>{'🏠'}</Text>
+            <View style={styles.infoLabelColumn}>
+              <Text style={styles.infoLabel}>Unidade</Text>
+              <Text style={styles.infoValue}>{unit}</Text>
             </View>
           </View>
         </View>
 
-        <View style={styles.section}>
+        {/* ─── Vehicles ──────────────────────────────────── */}
+        <View style={styles.vehiclesSection}>
           <Text style={styles.sectionLabel}>{commonMessages.profile.myVehicles}</Text>
-          <View style={styles.card}>
-            {vehiclesQuery.isLoading ? (
-              <ActivityIndicator size="small" color={colors.primary} style={{ padding: 16 }} />
-            ) : vehicles.length === 0 ? (
-              <Text style={styles.vehicleModel}>{commonMessages.vehicle.noVehicles}</Text>
-            ) : (
-              vehicles.map((v: VehicleItem, i: number) => (
-                <View
-                  key={v.plate}
-                  style={[styles.vehicleItem, i % 2 === 1 && styles.vehicleItemEven]}
-                >
-                  <BrazilianPlate plate={v.plate} size="sm" />
-                  <Text style={styles.vehicleModel}>{v.vehicleModel ?? 'Sem modelo'}</Text>
-                  <Text style={styles.vehicleArrow}>{'→'}</Text>
+
+          {vehiclesQuery.isLoading ? (
+            <ActivityIndicator size="small" color={colors.primary} style={{ padding: 16 }} />
+          ) : vehicles.length === 0 ? (
+            <Text style={styles.noVehiclesText}>{commonMessages.vehicle.noVehicles}</Text>
+          ) : (
+            vehicles.map((v: VehicleItem) => (
+              <View key={v.plate} style={styles.vehicleCard}>
+                <View style={styles.vehicleAccent} />
+                <View style={styles.vehicleContent}>
+                  <View style={styles.vehicleHeader}>
+                    <View style={styles.vehiclePlateBadge}>
+                      <Text style={styles.vehiclePlateText}>{v.plate}</Text>
+                    </View>
+                  </View>
+                  <Text style={styles.vehicleModel}>
+                    {v.vehicleModel ?? 'Sem modelo'}
+                  </Text>
+                  {v.vehicleColor ? (
+                    <Text style={styles.vehicleDetail}>
+                      Cor: {v.vehicleColor}
+                    </Text>
+                  ) : null}
                 </View>
-              ))
-            )}
-            <TouchableOpacity style={styles.addVehicleButton} onPress={handleAddVehicle}>
-              <Text style={styles.addVehicleIcon}>+</Text>
-              <Text style={styles.addVehicleText}>{commonMessages.addVehicle}</Text>
-            </TouchableOpacity>
-          </View>
+                <View style={styles.vehicleChevron}>
+                  <Text style={styles.vehicleChevronText}>{'›'}</Text>
+                </View>
+              </View>
+            ))
+          )}
+
+          <TouchableOpacity style={styles.addVehicleButton} onPress={handleAddVehicle}>
+            <Text style={styles.addVehicleIcon}>+</Text>
+            <Text style={styles.addVehicleText}>{commonMessages.addVehicle}</Text>
+          </TouchableOpacity>
         </View>
 
-        <View style={styles.section}>
-          <View style={styles.card}>
-            <TouchableOpacity style={styles.menuItem}>
-              <Text style={styles.menuIcon}>{'📜'}</Text>
-              <Text style={styles.menuLabel}>{commonMessages.profile.history}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.menuItem}>
-              <Text style={styles.menuIcon}>{'🔔'}</Text>
-              <Text style={styles.menuLabel}>{commonMessages.profile.notifications}</Text>
-              <View style={styles.menuBadge}>
-                <Text style={styles.menuBadgeText}>3</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.menuItem}>
-              <Text style={styles.menuIcon}>{'⚙️'}</Text>
-              <Text style={styles.menuLabel}>{commonMessages.profile.settings}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.menuItem}>
-              <Text style={[styles.menuIcon, styles.logoutIcon]}>{'🚪'}</Text>
-              <Text style={[styles.menuLabel, styles.logoutLabel]}>
-                {commonMessages.profile.logout}
-              </Text>
-            </TouchableOpacity>
-          </View>
+        {/* ─── Menu ──────────────────────────────────────── */}
+        <View style={styles.menuSection}>
+          <TouchableOpacity style={styles.menuItem}>
+            <Text style={styles.menuIcon}>{'📜'}</Text>
+            <Text style={styles.menuLabel}>{commonMessages.profile.history}</Text>
+            <Text style={styles.menuChevron}>{'›'}</Text>
+          </TouchableOpacity>
+          <View style={styles.menuDivider} />
+
+          <TouchableOpacity style={styles.menuItem}>
+            <Text style={styles.menuIcon}>{'🔔'}</Text>
+            <Text style={styles.menuLabel}>{commonMessages.profile.notifications}</Text>
+            <View style={styles.menuBadge}>
+              <Text style={styles.menuBadgeText}>3</Text>
+            </View>
+            <Text style={styles.menuChevron}>{'›'}</Text>
+          </TouchableOpacity>
+          <View style={styles.menuDivider} />
+
+          <TouchableOpacity style={styles.menuItem}>
+            <Text style={styles.menuIcon}>{'⚙️'}</Text>
+            <Text style={styles.menuLabel}>{commonMessages.profile.settings}</Text>
+            <Text style={styles.menuChevron}>{'›'}</Text>
+          </TouchableOpacity>
+          <View style={styles.menuDivider} />
+
+          <TouchableOpacity style={styles.menuItem}>
+            <Text style={[styles.menuIcon, styles.logoutIcon]}>{'🚪'}</Text>
+            <Text style={[styles.menuLabel, styles.logoutLabel]}>
+              {commonMessages.profile.logout}
+            </Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>

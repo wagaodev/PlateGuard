@@ -6,24 +6,34 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.surfaceDim,
   },
+  scrollContent: {
+    paddingBottom: 40,
+  },
+
+  // ─── Hero Section ────────────────────────────────────────────
   heroSection: {
-    backgroundColor: colors.surfaceContainerLow,
     alignItems: 'center',
-    paddingVertical: spacing.xl,
-    gap: spacing.sm,
+    paddingTop: spacing.xl,
+    paddingBottom: spacing.lg,
   },
   avatarContainer: {
     position: 'relative',
+    marginBottom: spacing.md,
   },
-  avatarWrapper: {
+  avatarOuter: {
     borderRadius: radii.full,
-    borderWidth: 2,
-    borderColor: colors.primaryBorder,
-    padding: 2,
+    borderWidth: 3,
+    borderColor: colors.primaryContainer,
+    padding: 3,
+    shadowColor: colors.primaryContainer,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.4,
+    shadowRadius: 16,
+    elevation: 10,
   },
   avatar: {
-    width: 88,
-    height: 88,
+    width: 96,
+    height: 96,
     borderRadius: radii.full,
   },
   avatarPlaceholder: {
@@ -33,57 +43,98 @@ export const styles = StyleSheet.create({
   },
   avatarInitial: {
     fontFamily: typography.fontDisplay,
-    fontSize: typography.sizeHeadlineMd,
+    fontSize: typography.sizeHeadlineLg,
     fontWeight: typography.weightBold,
     color: colors.primary,
   },
   editAvatarButton: {
     position: 'absolute',
-    bottom: 0,
-    right: -4,
-    width: 28,
-    height: 28,
+    bottom: 2,
+    right: -2,
+    width: 30,
+    height: 30,
     borderRadius: radii.full,
-    backgroundColor: colors.surfaceContainerHigh,
+    backgroundColor: colors.primaryContainer,
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 2,
+    borderColor: colors.surfaceDim,
   },
   editAvatarIcon: {
     fontSize: 14,
-    color: colors.primary,
+    color: colors.white,
   },
   heroName: {
     fontFamily: typography.fontDisplay,
     fontSize: typography.sizeHeadlineSm,
     fontWeight: typography.weightBold,
     color: colors.onSurface,
+    marginBottom: spacing.xs,
   },
   heroSubtitle: {
     fontFamily: typography.fontBody,
-    fontSize: typography.sizeLabelMd,
+    fontSize: typography.sizeTitleSm,
     color: colors.textSecondary,
+    marginBottom: spacing.sm,
   },
   activeBadge: {
     backgroundColor: colors.successBg,
     borderRadius: radii.full,
-    paddingVertical: 2,
-    paddingHorizontal: spacing.sm,
+    paddingVertical: 3,
+    paddingHorizontal: spacing.md,
   },
   activeBadgeText: {
     fontFamily: typography.fontBody,
     fontSize: typography.sizeLabelSm,
-    fontWeight: typography.weightSemiBold,
+    fontWeight: typography.weightBold,
     color: colors.success,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
-  section: {
-    paddingHorizontal: spacing.md,
-    paddingTop: spacing.md,
+
+  // ─── Info Section ────────────────────────────────────────────
+  infoSection: {
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.lg,
+    gap: spacing.md,
   },
-  card: {
-    backgroundColor: colors.surfaceContainer,
-    borderRadius: radii.lg,
-    padding: spacing.lg,
-    gap: spacing.listItemGap,
+  infoRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+  },
+  infoIcon: {
+    fontSize: 16,
+    width: 28,
+    textAlign: 'center',
+  },
+  infoLabelColumn: {
+    flex: 1,
+  },
+  infoLabel: {
+    fontFamily: typography.fontBody,
+    fontSize: typography.sizeLabelSm,
+    fontWeight: typography.weightSemiBold,
+    color: colors.textSecondary,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    marginBottom: 2,
+  },
+  infoValue: {
+    fontFamily: typography.fontBody,
+    fontSize: typography.sizeTitleSm,
+    color: colors.onSurface,
+  },
+  infoDivider: {
+    height: 1,
+    backgroundColor: colors.ghostBorder,
+    marginLeft: 36,
+  },
+
+  // ─── Vehicles Section ────────────────────────────────────────
+  vehiclesSection: {
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.xl,
   },
   sectionLabel: {
     fontFamily: typography.fontBody,
@@ -91,64 +142,79 @@ export const styles = StyleSheet.create({
     fontWeight: typography.weightSemiBold,
     color: colors.textSecondary,
     textTransform: 'uppercase',
+    letterSpacing: 1,
+    marginBottom: spacing.md,
+  },
+  vehicleCard: {
+    backgroundColor: colors.surfaceContainer,
+    borderRadius: radii.lg,
+    flexDirection: 'row',
+    overflow: 'hidden',
     marginBottom: spacing.sm,
   },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
+  vehicleAccent: {
+    width: 4,
+    backgroundColor: colors.primaryContainer,
   },
-  rowIcon: {
-    fontSize: 16,
-    color: colors.primary,
-    width: 24,
-  },
-  rowLabel: {
-    fontFamily: typography.fontBody,
-    fontSize: typography.sizeLabelMd,
-    color: colors.textSecondary,
-    width: 80,
-  },
-  rowValue: {
-    fontFamily: typography.fontBody,
-    fontSize: typography.sizeTitleSm,
-    color: colors.onSurface,
+  vehicleContent: {
     flex: 1,
+    padding: spacing.md,
+    gap: spacing.xs,
   },
-  vehicleItem: {
+  vehicleHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
-    paddingVertical: spacing.sm,
   },
-  vehicleItemEven: {
-    backgroundColor: colors.surfaceContainerLow,
-    borderRadius: radii.sm,
+  vehiclePlateBadge: {
+    backgroundColor: colors.primaryMuted,
+    borderRadius: radii.xs,
     paddingHorizontal: spacing.sm,
+    paddingVertical: 2,
+    borderWidth: 1,
+    borderColor: colors.primaryBorder,
+  },
+  vehiclePlateText: {
+    fontFamily: typography.fontDisplay,
+    fontSize: typography.sizeLabelMd,
+    fontWeight: typography.weightBold,
+    color: colors.primary,
+    letterSpacing: 1,
   },
   vehicleModel: {
     fontFamily: typography.fontBody,
     fontSize: typography.sizeTitleSm,
+    fontWeight: typography.weightMedium,
     color: colors.onSurface,
-    flex: 1,
   },
-  vehicleArrow: {
+  vehicleDetail: {
+    fontFamily: typography.fontBody,
+    fontSize: typography.sizeLabelMd,
+    color: colors.textSecondary,
+  },
+  vehicleChevron: {
+    justifyContent: 'center',
+    paddingRight: spacing.md,
+  },
+  vehicleChevronText: {
     fontSize: 16,
-    color: colors.primary,
+    color: colors.textSecondary,
   },
   addVehicleButton: {
-    backgroundColor: colors.primaryMuted,
-    borderRadius: radii.md,
+    borderRadius: radii.lg,
     borderWidth: 1,
     borderColor: colors.primaryBorder,
+    borderStyle: 'dashed',
     paddingVertical: spacing.md,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     gap: spacing.sm,
+    marginTop: spacing.xs,
   },
   addVehicleIcon: {
     fontSize: 18,
+    fontWeight: typography.weightBold,
     color: colors.primary,
   },
   addVehicleText: {
@@ -157,16 +223,30 @@ export const styles = StyleSheet.create({
     fontWeight: typography.weightSemiBold,
     color: colors.primary,
   },
+  noVehiclesText: {
+    fontFamily: typography.fontBody,
+    fontSize: typography.sizeTitleSm,
+    color: colors.textSecondary,
+    textAlign: 'center',
+    paddingVertical: spacing.md,
+  },
+
+  // ─── Menu Section ────────────────────────────────────────────
+  menuSection: {
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.xl,
+    gap: 0,
+  },
   menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingVertical: 14,
     gap: spacing.sm,
-    paddingVertical: spacing.sm,
   },
   menuIcon: {
-    fontSize: 16,
-    color: colors.primary,
-    width: 24,
+    fontSize: 18,
+    width: 28,
+    textAlign: 'center',
   },
   menuLabel: {
     fontFamily: typography.fontBody,
@@ -175,10 +255,10 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
   menuBadge: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.primaryContainer,
     borderRadius: radii.full,
-    minWidth: 20,
-    height: 20,
+    minWidth: 22,
+    height: 22,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 6,
@@ -187,7 +267,16 @@ export const styles = StyleSheet.create({
     fontFamily: typography.fontBody,
     fontSize: typography.sizeLabelSm,
     fontWeight: typography.weightBold,
-    color: colors.surface,
+    color: colors.white,
+  },
+  menuChevron: {
+    fontSize: 14,
+    color: colors.textMuted,
+  },
+  menuDivider: {
+    height: 1,
+    backgroundColor: colors.ghostBorder,
+    marginLeft: 36,
   },
   logoutLabel: {
     color: colors.error,
