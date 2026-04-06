@@ -20,12 +20,14 @@ export function PlateCaptureScreen() {
   const {
     plate,
     setPlate,
+    isValidLength,
     handleLookup,
     handleGoBack,
     handleCapture,
     handleToggleManualInput,
     handleOpenSettings,
     isLooking,
+    isProcessingOcr,
     showManualInput,
     hasPermission,
     device,
@@ -34,8 +36,6 @@ export function PlateCaptureScreen() {
   } = usePlateCapture();
 
   const [plateFocused, setPlateFocused] = useState(false);
-  const cleanPlate = plate.toUpperCase().replace(/[^A-Z0-9]/g, '');
-  const isValidLength = cleanPlate.length === 7;
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -64,34 +64,45 @@ export function PlateCaptureScreen() {
                 <View style={[styles.bracket, styles.bracketBottomRight]} />
               </View>
               <Text style={styles.cameraHintText}>
-                Aponte para a placa do veículo
+                {isProcessingOcr
+                  ? commonMessages.camera.readingPlate
+                  : commonMessages.camera.pointToPlate}
               </Text>
             </View>
             <View style={styles.cameraActions}>
+              {isProcessingOcr ? (
+                <View style={styles.captureButton}>
+                  <ActivityIndicator size="small" color={colors.primary} />
+                </View>
+              ) : (
+                <TouchableOpacity
+                  style={styles.captureButton}
+                  onPress={handleCapture}
+                  activeOpacity={0.7}
+                >
+                  <View style={styles.captureButtonInner} />
+                </TouchableOpacity>
+              )}
               <TouchableOpacity
-                style={styles.captureButton}
-                onPress={handleCapture}
-                activeOpacity={0.7}
+                onPress={handleToggleManualInput}
+                disabled={isProcessingOcr}
               >
-                <View style={styles.captureButtonInner} />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={handleToggleManualInput}>
-                <Text style={styles.manualEntryLink}>Digitar manualmente</Text>
+                <Text style={styles.manualEntryLink}>{commonMessages.camera.enterManually}</Text>
               </TouchableOpacity>
             </View>
           </View>
         ) : !showManualInput && !hasPermission ? (
           <View style={styles.formCard}>
             <Text style={styles.permissionIcon}>{'📷'}</Text>
-            <Text style={styles.permissionTitle}>Permissão de câmera necessária</Text>
+            <Text style={styles.permissionTitle}>{commonMessages.camera.permissionRequired}</Text>
             <Text style={styles.permissionMessage}>
-              Para escanear placas, permita o acesso à câmera nas configurações.
+              {commonMessages.camera.permissionMessage}
             </Text>
             <TouchableOpacity style={styles.permissionButton} onPress={handleOpenSettings}>
-              <Text style={styles.permissionButtonText}>Abrir Configurações</Text>
+              <Text style={styles.permissionButtonText}>{commonMessages.camera.openSettings}</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={handleToggleManualInput}>
-              <Text style={styles.manualEntryLink}>Digitar manualmente</Text>
+              <Text style={styles.manualEntryLink}>{commonMessages.camera.enterManually}</Text>
             </TouchableOpacity>
           </View>
         ) : (
@@ -112,9 +123,9 @@ export function PlateCaptureScreen() {
               editable={!isLooking}
             />
 
-            {cleanPlate.length >= 3 && (
+            {plate.length >= 3 && (
               <View style={styles.platePreview}>
-                <BrazilianPlate plate={cleanPlate} size="md" />
+                <BrazilianPlate plate={plate} size="md" />
               </View>
             )}
           </View>
@@ -147,9 +158,9 @@ export function PlateCaptureScreen() {
       </ScrollView>
       {AlertComponent}
       <LoadingOverlay
-        visible={isLooking}
-        message="Consultando DETRAN..."
-        subtitle="Buscando dados do veículo"
+        visible={isLooking || isProcessingOcr}
+        message={isProcessingOcr ? commonMessages.camera.readingPlate : commonMessages.vehicle.consulting}
+        subtitle={isProcessingOcr ? commonMessages.camera.processingOcr : commonMessages.vehicle.consultingSubtitle}
       />
     </SafeAreaView>
   );
