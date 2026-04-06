@@ -1,11 +1,15 @@
 import { Platform } from 'react-native';
 
-// Android emulator uses 10.0.2.2 to reach host machine
-// iOS simulator uses localhost
-// iOS physical device needs the host machine's local IP
+// ─── API Configuration ───────────────────────────────────────────────
+// Production/device: uses ngrok public URL (works from any network)
+// Development: uses local network IPs for emulators/simulators
+const NGROK_URL = 'https://000d-23-23-240-197.ngrok-free.app';
+
 const ANDROID_LOCALHOST = '10.0.2.2';
-const IOS_LOCALHOST = __DEV__ ? '192.168.1.35' : 'localhost';
+const IOS_LOCALHOST = 'localhost';
 
-const host = Platform.OS === 'android' ? ANDROID_LOCALHOST : IOS_LOCALHOST;
+const devHost = Platform.OS === 'android' ? ANDROID_LOCALHOST : IOS_LOCALHOST;
+const DEV_URL = `http://${devHost}:5001`;
 
-export const API_BASE_URL = `http://${host}:5001`;
+// Use ngrok for physical devices, localhost for emulators/simulators
+export const API_BASE_URL = __DEV__ ? DEV_URL : NGROK_URL;
