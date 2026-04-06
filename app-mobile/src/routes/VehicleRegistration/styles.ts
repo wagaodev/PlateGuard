@@ -6,16 +6,17 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.surfaceDim,
   },
+
+  // ─── Header ──────────────────────────────────────────────────────
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.md,
-    gap: spacing.sm,
   },
   backButton: {
-    width: 40,
-    height: 40,
+    width: 36,
+    height: 36,
     borderRadius: radii.full,
     justifyContent: 'center',
     alignItems: 'center',
@@ -24,69 +25,167 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     color: colors.primary,
   },
+  headerTitleContainer: {
+    flex: 1,
+    alignItems: 'center',
+  },
   headerTitle: {
     fontFamily: typography.fontBody,
-    fontSize: typography.sizeHeadlineSm,
+    fontSize: typography.sizeTitleLg,
     fontWeight: typography.weightSemiBold,
     color: colors.onSurface,
   },
-  content: {
-    paddingHorizontal: spacing.md,
-  },
-  plateHero: {
-    alignItems: 'center',
-    backgroundColor: colors.surfaceContainerHigh,
-    borderRadius: radii.xl,
-    paddingVertical: spacing.lg,
-    paddingHorizontal: spacing.md,
-    borderWidth: 1,
-    borderColor: colors.outlineVariant,
-  },
-  lookupInfoText: {
+  stepIndicator: {
     fontFamily: typography.fontBody,
     fontSize: typography.sizeLabelMd,
     color: colors.textSecondary,
-    marginTop: spacing.sm,
+    width: 36,
+    textAlign: 'right',
   },
-  formCard: {
-    backgroundColor: colors.surfaceContainer,
-    borderRadius: radii.lg,
-    padding: spacing.lg,
-    gap: spacing.sm,
-  },
-  detailRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: spacing.sm,
-    gap: spacing.sm,
-  },
-  detailIcon: {
-    fontSize: 18,
-    width: 28,
-    textAlign: 'center',
-  },
-  detailContent: {
+
+  // ─── Content ─────────────────────────────────────────────────────
+  content: {
     flex: 1,
   },
-  detailLabel: {
+  contentContainer: {
+    paddingHorizontal: spacing.lg,
+    paddingBottom: 40,
+    gap: spacing.lg,
+  },
+
+  // ─── Section Label ───────────────────────────────────────────────
+  sectionLabel: {
     fontFamily: typography.fontBody,
     fontSize: typography.sizeLabelSm,
+    fontWeight: typography.weightMedium,
     color: colors.textSecondary,
+    letterSpacing: 1.2,
     textTransform: 'uppercase',
+    marginBottom: spacing.sm,
   },
-  detailValue: {
+
+  // ─── Plate Section ──────────────────────────────────────────────
+  plateSection: {
+    gap: spacing.sm,
+  },
+  plateInputRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.md,
+  },
+  plateTextLarge: {
+    flex: 1,
+    fontFamily: typography.plateFont,
+    fontSize: 32,
+    fontWeight: typography.weightBold,
+    color: colors.onSurface,
+    letterSpacing: typography.plateSpacing,
+  },
+  cameraIconButton: {
+    width: 44,
+    height: 44,
+    borderRadius: radii.md,
+    backgroundColor: colors.surfaceContainerHigh,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.outlineVariant,
+  },
+  cameraIconText: {
+    fontSize: 18,
+  },
+  platePreviewRow: {
+    alignItems: 'flex-start',
+    marginTop: spacing.xs,
+  },
+
+  // ─── Separator ───────────────────────────────────────────────────
+  separator: {
+    height: 1,
+    backgroundColor: colors.outlineVariant,
+    opacity: 0.3,
+  },
+
+  // ─── Model Section ──────────────────────────────────────────────
+  modelSection: {
+    gap: spacing.xs,
+  },
+  modelText: {
+    fontFamily: typography.fontBody,
+    fontSize: typography.sizeTitleLg,
+    fontWeight: typography.weightMedium,
+    color: colors.onSurface,
+  },
+
+  // ─── Color Section ──────────────────────────────────────────────
+  colorSection: {
+    gap: spacing.sm,
+  },
+  colorDotsRow: {
+    flexDirection: 'row',
+    gap: spacing.md,
+    paddingVertical: spacing.xs,
+  },
+  colorDotWrapper: {
+    width: 40,
+    height: 40,
+    borderRadius: radii.full,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  colorDotWrapperActive: {
+    borderWidth: 2,
+    borderColor: colors.primary,
+  },
+  colorDotWrapperInactive: {
+    borderWidth: 2,
+    borderColor: 'transparent',
+  },
+  colorDot: {
+    width: 32,
+    height: 32,
+    borderRadius: radii.full,
+  },
+
+  // ─── Vehicle Type Section ───────────────────────────────────────
+  typeSection: {
+    gap: spacing.sm,
+  },
+  segmentedControl: {
+    flexDirection: 'row',
+    backgroundColor: colors.surfaceContainer,
+    borderRadius: radii.md,
+    padding: 3,
+  },
+  segmentedButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: spacing.sm + 2,
+    borderRadius: radii.sm + 2,
+    gap: spacing.xs,
+  },
+  segmentedButtonActive: {
+    backgroundColor: colors.surfaceContainerHigh,
+  },
+  segmentedIcon: {
+    fontSize: 14,
+  },
+  segmentedText: {
     fontFamily: typography.fontBody,
     fontSize: typography.sizeTitleSm,
-    color: colors.onSurface,
     fontWeight: typography.weightMedium,
+    color: colors.textSecondary,
   },
-  lockIcon: {
-    fontSize: 12,
-    opacity: 0.4,
+  segmentedTextActive: {
+    color: colors.onSurface,
   },
+
+  // ─── QR Toggle ──────────────────────────────────────────────────
   qrToggle: {
     backgroundColor: colors.surfaceContainerLow,
-    borderRadius: radii.md,
+    borderRadius: radii.lg,
     borderWidth: 1,
     borderColor: colors.primaryBorder,
     padding: spacing.md,
@@ -94,9 +193,16 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     gap: spacing.md,
   },
+  qrIconContainer: {
+    width: 44,
+    height: 44,
+    borderRadius: radii.md,
+    backgroundColor: colors.primaryMuted,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   qrIcon: {
-    fontSize: 24,
-    color: colors.primary,
+    fontSize: 22,
   },
   qrTextContainer: {
     flex: 1,
@@ -104,12 +210,14 @@ export const styles = StyleSheet.create({
   qrTitle: {
     fontFamily: typography.fontBody,
     fontSize: typography.sizeTitleSm,
+    fontWeight: typography.weightSemiBold,
     color: colors.onSurface,
   },
   qrSubtitle: {
     fontFamily: typography.fontBody,
     fontSize: typography.sizeLabelMd,
     color: colors.textSecondary,
+    marginTop: 2,
   },
   toggleTrack: {
     width: 48,
@@ -128,7 +236,7 @@ export const styles = StyleSheet.create({
     width: 22,
     height: 22,
     borderRadius: radii.full,
-    backgroundColor: colors.onSurface,
+    backgroundColor: colors.surface,
   },
   toggleThumbOn: {
     alignSelf: 'flex-end',
@@ -136,13 +244,18 @@ export const styles = StyleSheet.create({
   toggleThumbOff: {
     alignSelf: 'flex-start',
   },
+
+  // ─── Submit Button ──────────────────────────────────────────────
   submitButton: {
     backgroundColor: colors.primary,
     borderRadius: radii.lg,
     paddingVertical: spacing.md,
     alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.25)',
+    borderTopColor: 'rgba(255, 255, 255, 0.2)',
     ...shadows.primaryButtonGlow,
   },
   submitButtonText: {
