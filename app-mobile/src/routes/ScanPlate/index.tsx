@@ -209,14 +209,25 @@ export function ScanPlateScreen() {
         </View>
 
         {!isCamera && (
-          <View style={styles.utilityRow}>
-            <View style={styles.utilityButton}>
-              <Text style={styles.utilityIcon}>{'🔦'}</Text>
+          <>
+            <TouchableOpacity
+              style={styles.scanPlateButton}
+              onPress={handleScanPlate}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.scanPlateButtonIcon}>{'📱'}</Text>
+              <Text style={styles.scanPlateButtonText}>Ler QR Code</Text>
+            </TouchableOpacity>
+
+            <View style={styles.utilityRow}>
+              <View style={styles.utilityButton}>
+                <Text style={styles.utilityIcon}>{'🔦'}</Text>
+              </View>
+              <View style={styles.utilityButton}>
+                <Text style={styles.utilityIcon}>{'🖼'}</Text>
+              </View>
             </View>
-            <View style={styles.utilityButton}>
-              <Text style={styles.utilityIcon}>{'🖼'}</Text>
-            </View>
-          </View>
+          </>
         )}
 
         {isCamera && (
