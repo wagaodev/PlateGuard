@@ -1,5 +1,6 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger';
+import { AccessLog } from '@prisma/client';
 import { AccessLogService } from './access-log.service';
 
 @ApiTags('access-logs')
@@ -14,7 +15,7 @@ export class AccessLogController {
     required: false,
     description: 'Filtrar por placa',
   })
-  async findAll(@Query('plate') plate?: string) {
+  async findAll(@Query('plate') plate?: string): Promise<AccessLog[]> {
     if (plate) {
       return this.service.getByPlate(plate.toUpperCase());
     }

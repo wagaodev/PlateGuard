@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { randomUUID } from 'crypto';
+import { Vehicle } from '@prisma/client';
 import { VehiclesRepository } from './vehicles.repository';
 import { CreateVehicleDto } from './dto/create-vehicle.dto';
 
@@ -11,7 +12,7 @@ import { CreateVehicleDto } from './dto/create-vehicle.dto';
 export class VehiclesService {
   constructor(private readonly repository: VehiclesRepository) {}
 
-  async create(dto: CreateVehicleDto) {
+  async create(dto: CreateVehicleDto): Promise<Vehicle> {
     // Simulates processing latency (2s)
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
@@ -37,11 +38,11 @@ export class VehiclesService {
     });
   }
 
-  async findAll() {
+  async findAll(): Promise<Vehicle[]> {
     return this.repository.findAll();
   }
 
-  async findByPlate(plate: string) {
+  async findByPlate(plate: string): Promise<Vehicle> {
     const vehicle = await this.repository.findByPlate(plate.toUpperCase());
     if (!vehicle) {
       throw new NotFoundException(`Veículo com placa ${plate} não encontrado`);
@@ -49,7 +50,7 @@ export class VehiclesService {
     return vehicle;
   }
 
-  async deleteByPlate(plate: string) {
+  async deleteByPlate(plate: string): Promise<Vehicle> {
     const vehicle = await this.repository.findByPlate(plate.toUpperCase());
     if (!vehicle) {
       throw new NotFoundException(`Veículo com placa ${plate} não encontrado`);

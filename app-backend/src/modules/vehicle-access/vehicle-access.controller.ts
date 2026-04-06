@@ -13,6 +13,26 @@ import { ValidatePlateDto } from './dto/validate-plate.dto';
 import { ValidateQrDto } from './dto/validate-qr.dto';
 import { VehicleAccessResponseDto } from './dto/vehicle-access-response.dto';
 
+/**
+ * Throws the appropriate HTTP exception based on feedbackType.
+ * Controller delegates business logic, but maps domain results to HTTP semantics.
+ */
+function throwIfNotAllowed(result: VehicleAccessResponseDto): void {
+  if (result.feedbackType === 'DENIED') {
+    throw new ForbiddenException({
+      ...result,
+      statusCode: HttpStatus.FORBIDDEN,
+    });
+  }
+
+  if (result.feedbackType === 'NOT_FOUND') {
+    throw new NotFoundException({
+      ...result,
+      statusCode: HttpStatus.NOT_FOUND,
+    });
+  }
+}
+
 @ApiTags('vehicle-access')
 @Controller('vehicle-access')
 export class VehicleAccessController {
@@ -37,19 +57,7 @@ export class VehicleAccessController {
       dto.entryMethod ?? 'CAMERA',
     );
 
-    if (result.feedbackType === 'DENIED') {
-      throw new ForbiddenException({
-        ...result,
-        statusCode: HttpStatus.FORBIDDEN,
-      });
-    }
-
-    if (result.feedbackType === 'NOT_FOUND') {
-      throw new NotFoundException({
-        ...result,
-        statusCode: HttpStatus.NOT_FOUND,
-      });
-    }
+    throwIfNotAllowed(result);
 
     return result;
   }
@@ -69,19 +77,7 @@ export class VehicleAccessController {
   ): Promise<VehicleAccessResponseDto> {
     const result = await this.service.validateQrCode(dto.token);
 
-    if (result.feedbackType === 'DENIED') {
-      throw new ForbiddenException({
-        ...result,
-        statusCode: HttpStatus.FORBIDDEN,
-      });
-    }
-
-    if (result.feedbackType === 'NOT_FOUND') {
-      throw new NotFoundException({
-        ...result,
-        statusCode: HttpStatus.NOT_FOUND,
-      });
-    }
+    throwIfNotAllowed(result);
 
     return result;
   }

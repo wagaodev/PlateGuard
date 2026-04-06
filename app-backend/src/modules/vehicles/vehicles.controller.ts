@@ -9,6 +9,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Vehicle } from '@prisma/client';
 import { VehiclesService } from './vehicles.service';
 import { CreateVehicleDto } from './dto/create-vehicle.dto';
 import { VehicleResponseDto } from './dto/vehicle-response.dto';
@@ -27,14 +28,14 @@ export class VehiclesController {
     type: VehicleResponseDto,
   })
   @ApiResponse({ status: 409, description: 'Placa já cadastrada' })
-  async create(@Body() dto: CreateVehicleDto): Promise<VehicleResponseDto> {
+  async create(@Body() dto: CreateVehicleDto): Promise<Vehicle> {
     return this.service.create(dto);
   }
 
   @Get()
   @ApiOperation({ summary: 'Listar todos os veículos' })
   @ApiResponse({ status: 200, type: [VehicleResponseDto] })
-  async findAll(): Promise<VehicleResponseDto[]> {
+  async findAll(): Promise<Vehicle[]> {
     return this.service.findAll();
   }
 
@@ -42,9 +43,7 @@ export class VehiclesController {
   @ApiOperation({ summary: 'Buscar veículo por placa' })
   @ApiResponse({ status: 200, type: VehicleResponseDto })
   @ApiResponse({ status: 404, description: 'Veículo não encontrado' })
-  async findByPlate(
-    @Param('plate') plate: string,
-  ): Promise<VehicleResponseDto> {
+  async findByPlate(@Param('plate') plate: string): Promise<Vehicle> {
     return this.service.findByPlate(plate);
   }
 
