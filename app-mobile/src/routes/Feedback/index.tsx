@@ -65,7 +65,7 @@ export function FeedbackScreen() {
           </Animated.View>
 
           <Text style={styles.heroTitle}>{messages.title}</Text>
-          <Text style={[styles.heroSubtitle, { color: config.subtitleColor }]}>
+          <Text style={styles.heroSubtitle}>
             {messages.subtitle}
           </Text>
         </Animated.View>

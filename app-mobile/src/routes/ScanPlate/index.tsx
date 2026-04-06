@@ -95,6 +95,7 @@ export function ScanPlateScreen() {
     handleSimulatedScan,
     handleScanPlate,
     isValidating,
+    AlertComponent,
   } = useScanPlate();
 
   const { name, avatarUri } = useUserStore();
@@ -322,6 +323,7 @@ export function ScanPlateScreen() {
         </View>
       </ScrollView>
 
+      {AlertComponent}
       <LoadingOverlay
         visible={isValidating}
         message={commonMessages.scan.validatingPlate}

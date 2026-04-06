@@ -4,7 +4,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/navigation.types';
 import { useVehicleAccessStore } from '../../store/vehicleAccessStore';
 import { vehicleAccessMessages } from '../../locales/pt-BR/vehicleAccess';
-import { stateConfigs, buildDetailRows } from './feedback.config';
+import { getStateConfig, buildDetailRows } from './feedback.config';
 import type { StateConfig, DetailRowData } from './feedback.config';
 
 type FeedbackRoute = RouteProp<RootStackParamList, 'Feedback'>;
@@ -31,7 +31,7 @@ export function useFeedback(): UseFeedbackReturn {
 
   const { feedbackType } = result;
 
-  const config = stateConfigs[feedbackType];
+  const config = getStateConfig(feedbackType);
 
   const messages = vehicleAccessMessages[feedbackType];
 
